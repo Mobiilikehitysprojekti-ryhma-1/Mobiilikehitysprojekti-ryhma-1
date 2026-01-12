@@ -1,7 +1,7 @@
 # Architecture
 ## Repository structure
 ```
-/
+/   
     src/
         app/
             App.tsx
@@ -12,8 +12,13 @@
                 state/
                 data/
                 domain/
+            tasks/
+            measurements/
+            safety/
         shared/
-    documents/
+            hooks/
+            types/
+    Documents/
         Architecture.md
         flows/
 ```
