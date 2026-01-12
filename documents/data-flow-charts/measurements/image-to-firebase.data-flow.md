@@ -1,4 +1,4 @@
-```mermaid`
+```mermaid
 sequenceDiagram
     participant U as User
     participant APP as React Native App
@@ -11,7 +11,7 @@ sequenceDiagram
     AUTH-->>APP: Session valid
     APP->>STORE: Upload image (measurement photo)
     STORE-->>APP: storagePath / downloadUrl
-    APP->>DB: Create measurement record\n(userId, type="bloodPressure", photoPath, createdAt, status="uploaded")
+    APP->>DB: Create measurement record<br>(userId, type="bloodPressure", photoPath, createdAt, status="uploaded")
     DB-->>APP: measurementId created
     APP-->>U: Upload complete
 ```
