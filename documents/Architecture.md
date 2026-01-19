@@ -12,6 +12,7 @@
                 state/
                 data/
                 domain/
+                tests/
             tasks/
             measurements/
             safety/
@@ -39,13 +40,30 @@ feature/
     state/
     data/
     domain/
+    tests/
 ```
 
 Not all the folders above are necesessary.<br>
 Feature folders expand with needs.
 
 ### Tech stack
-- ´React-Native´ for application
+- ´React-Native (Expo)´ for application
+- ´TypeScript´
 - ´React-Native-Paper´
+- ´React Navigation´
 - ´Zod´ for DTOs and validation
-- ´Jest´ for tests
+- ´Jest + jest-expo´ for tests
+- ´Expo Secure Store´
+- ´Expo Local Authentication´
+- ´Firebase´
+
+## Setup (Windows / Command Prompt)
+
+### 1. Install dependencies
+npm install
+
+### 2. Start development server
+npx expo start
+
+### Tests
+npm test

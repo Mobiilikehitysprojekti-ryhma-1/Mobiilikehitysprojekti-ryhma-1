@@ -1,0 +1,63 @@
+# Node / npm
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Expo
+.expo/
+expo-env.d.ts
+web-build/
+
+# React Native
+android/
+ios/
+*.xcworkspace
+*.xcuserstate
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.hmap
+*.ipa
+*.apk
+*.aab
+
+# Metro / cache
+.metro-cache/
+.cache/
+
+# TypeScript
+*.tsbuildinfo
+
+# Jest / coverage
+coverage/
+.jest/
+reports/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Firebase
+firebase-debug.log
+.firestore/
+.functions/
+
+# Logs
+logs/
+*.log
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# Temporary / backups
+_tmp/
+backup/
