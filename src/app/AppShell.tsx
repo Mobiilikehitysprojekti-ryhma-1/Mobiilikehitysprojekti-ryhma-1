@@ -15,8 +15,17 @@ export default function AppShell() {
     <PaperProvider theme={Theme}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Login'>
-        <Stack.Screen name='Registration' component={Registration} options={{ title: 'Create Account', headerStyle: { backgroundColor: Theme.colors.primary }, headerTintColor: Theme.colors.onPrimary }} />
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name='Registration' component={Registration} options={{ 
+            title: 'Create Account', 
+            headerStyle: { backgroundColor: Theme.colors.primary }, 
+            headerTintColor: Theme.colors.onPrimary 
+        }} />
+            
+        <Stack.Screen name="Login" component={LoginScreen} options={{ 
+            title: '', 
+            headerStyle: { backgroundColor: Theme.colors.primary},
+            headerShadowVisible: false
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
     </PaperProvider>
