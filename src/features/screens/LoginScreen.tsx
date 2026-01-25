@@ -31,22 +31,28 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   }
 
   return (
-    <View style={{ flex: 1, padding: 24, backgroundColor: theme.colors.background, justifyContent: 'space-between' }}>
+    <View style={{ flex: 1, padding: 24, backgroundColor: theme.colors.primaryContainer, justifyContent: 'space-between' }}>
 
-      <View style={{ width: "100%", maxWidth: 400, alignSelf: 'center' }}>
+      <View style={{ width: "100%", maxWidth: 400, alignSelf: 'center', marginTop: 28 }}>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "100%" }}>
-          <PrimaryButton onPress={() => navigation.navigate("Registration")}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "100%", }}>
+          <PrimaryButton 
+            mode="contained" 
+            style={{ flex: 1, marginRight: 8 }}
+          >
             User
           </PrimaryButton>
-          
-          <PrimaryButton onPress={() => navigation.navigate("Registration")}>
+
+          <PrimaryButton 
+            mode="contained" 
+            style={{ flex: 1, marginLeft: 8 }}
+          >
             Admin
           </PrimaryButton>
         </View>
 
         {/* Login form */}
-        <View style={{ width: '100%', marginTop: 32 }}>
+        <View style={{ width: '100%', position: 'absolute', maxWidth: 400, marginTop: 250 }}>
           <FlatInputField
             label="Username"
             placeholder="Enter your username"
@@ -64,13 +70,14 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
             keyboardType="default"
           />
           <View style={{ height: 32 }} />
-          <PrimaryButton 
-            disabled={!checkLoginInputs()} 
-            style={{ backgroundColor: theme.colors.secondary }}
-            onPress={() => navigation.navigate("Registration")}
-          >
-            Login
-          </PrimaryButton>
+            <PrimaryButton 
+              disabled={!checkLoginInputs()}
+              buttonColor={theme.colors.secondary}
+              textColor={theme.colors.onSecondary}
+              onPress={() => navigation.navigate("Registration")}>
+              Login
+            </PrimaryButton>
+
         </View>
       </View>
 
