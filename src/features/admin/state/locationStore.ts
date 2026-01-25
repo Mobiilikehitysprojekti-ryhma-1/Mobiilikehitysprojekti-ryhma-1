@@ -16,7 +16,10 @@ export function useLocation(uid: string | undefined) {
 			if (locationDoc) {
 				setLocation({
 					enabled: locationDoc.enabled,
-					home: locationDoc.home,
+					home: locationDoc.home ? {
+						...locationDoc.home,
+						address: locationDoc.home.address,
+					} : undefined,
 				});
 			} else {
 				// Set default values if no location exists
@@ -69,6 +72,55 @@ export function useLocation(uid: string | undefined) {
 		}
 	}, [uid]);
 
+	/**
+	 * Geocode an address and save it as the home location
+	 * @param address - The address string to geocode
+	 * @param radiusMeters - The radius in meters for the safety area
+	 * @returns The geocoded result with coordinates and formatted address
+	 */
+	const geocodeAndSave = useCallback(async (address: string, radiusMeters: number) => {
+		if (!uid) {
+			throw new Error("User ID is required");
+		}
+
+		setLoading(true);
+		setError(null);
+		
+		try {
+			// Geocode the address
+			const geocodeResult = await locationRepository.geocodeAddress(address);
+			
+			if (!geocodeResult.success || !geocodeResult.lat || !geocodeResult.lng) {
+				const errorMessage = geocodeResult.error || "Failed to geocode address";
+				setError(errorMessage);
+				throw new Error(errorMessage);
+			}
+
+			// Save the location with geocoded coordinates and address
+			const locationToSave: LocationPayload = {
+				enabled: true,
+				home: {
+					lat: geocodeResult.lat,
+					lng: geocodeResult.lng,
+					radiusMeters,
+					address: geocodeResult.formattedAddress,
+				},
+			};
+
+			await locationRepository.setLocation(uid, locationToSave);
+			setLocation(locationToSave);
+
+			// Return the geocode result for display purposes
+			return geocodeResult;
+		} catch (err: any) {
+			console.error("Error geocoding and saving location:", err);
+			setError(err.message || "Failed to geocode and save location");
+			throw err;
+		} finally {
+			setLoading(false);
+		}
+	}, [uid]);
+
 	return {
 		location,
 		loading,
@@ -76,5 +128,6 @@ export function useLocation(uid: string | undefined) {
 		loadLocation,
 		saveLocation,
 		updateLocation,
+		geocodeAndSave,
 	};
 }

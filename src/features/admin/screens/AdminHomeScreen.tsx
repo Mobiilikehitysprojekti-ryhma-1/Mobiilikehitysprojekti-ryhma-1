@@ -52,15 +52,48 @@ export function AdminHomeScreen({}: Props) {
       await meds.loadMeds();
       console.log("MEDS:", meds.meds);
 
-      // 5) setLocation via state layer
-      await location.saveLocation({
-        enabled: true,
-        home: { lat: 60.1699, lng: 24.9384, radiusMeters: 150 },
-      });
+      // 5) Test geocoding with an address (like the real version)
+      console.log("Testing geocoding with address...");
+      let geocodeResult = null;
+      try {
+        geocodeResult = await location.geocodeAndSave(
+          "Mannerheimintie 1, Helsinki, Finland",
+          150
+        );
+        
+        if (geocodeResult && geocodeResult.success) {
+          console.log("✓ Geocoding successful!");
+          console.log("  Formatted Address:", geocodeResult.formattedAddress);
+          console.log("  Latitude:", geocodeResult.lat);
+          console.log("  Longitude:", geocodeResult.lng);
+          if (geocodeResult.addressComponents) {
+            console.log("  Address Components:", geocodeResult.addressComponents);
+          }
+        } else {
+          console.error("✗ Geocoding failed:", geocodeResult?.error);
+        }
+      } catch (err: any) {
+        console.error("✗ Geocoding test error:", err.message || err);
+      }
 
-      // 6) getLocation via state layer
+      // 6) Load location from database and display like real version
       await location.loadLocation();
-      console.log("LOCATION:", location.location);
+      
+      if (location.error) {
+        console.error("✗ Error loading location:", location.error);
+      } else if (location.location?.home) {
+        console.log("✓ Location loaded from database:");
+        console.log("  Tietokannassa oleva osoite on:");
+        console.log("    Latitude:", location.location.home.lat.toFixed(6));
+        console.log("    Longitude:", location.location.home.lng.toFixed(6));
+        console.log("    Radius:", location.location.home.radiusMeters, "meters");
+        if (location.location.home.address) {
+          console.log("    Address:", location.location.home.address);
+        }
+        console.log("    Enabled:", location.location.enabled);
+      } else {
+        console.log("✗ No location data found in database");
+      }
 
       // 7) Create sample daily status for today and yesterday
       const today = new Date();

@@ -45,6 +45,7 @@ reports/
 firebase-debug.log
 .firestore/
 .functions/
+functions/lib/
 
 # Logs
 logs/
