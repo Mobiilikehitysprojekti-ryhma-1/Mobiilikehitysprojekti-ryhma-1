@@ -17,6 +17,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [hasBiometric, setHasBiometric] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [activeRole, setActiveRole] = useState<"User" | "Admin">("User");
 
   function checkLoginInputs() {
     return username.trim() !== "" && password.trim() !== "";
@@ -31,27 +32,30 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   }
 
   return (
-    <View style={{ flex: 1, padding: 24, backgroundColor: theme.colors.primaryContainer, justifyContent: 'space-between' }}>
+    <View style={{ flex: 1, paddingTop: 24, backgroundColor: theme.colors.primaryContainer, justifyContent: 'space-between' }}>
 
-      <View style={{ width: "100%", maxWidth: 400, alignSelf: 'center', marginTop: 28 }}>
+      <View style={{ width: "100%", maxWidth: 500, alignSelf: 'center', marginTop: 28 }}>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "100%", }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "100%" }}>
           <PrimaryButton 
-            mode="contained" 
-            style={{ flex: 1, marginRight: 8 }}>
+            style={{ flex: 1, marginRight: 8 }}
+            buttonColor={activeRole === "Admin" ? theme.colors.primary : theme.colors.secondary}
+            textColor={activeRole === "Admin" ? theme.colors.onTertiary : theme.colors.onPrimary}
+            onPress={() => setActiveRole("User")}>
             User
           </PrimaryButton>
 
           <PrimaryButton 
-            mode="contained" 
             style={{ flex: 1, marginLeft: 8 }}
-          >
+            buttonColor={activeRole === "User" ? theme.colors.primary : theme.colors.secondary}
+            textColor={activeRole === "User" ? theme.colors.onTertiary : theme.colors.onPrimary}
+            onPress={() => setActiveRole("Admin")}>
             Admin
           </PrimaryButton>
         </View>
 
         {/* Login form */}
-        <View style={{ width: '100%', position: 'absolute', maxWidth: 400, marginTop: 250 }}>
+        <View style={{ width: '100%', position: 'absolute', marginTop: 250, padding: 10 }}>
           <FlatInputField
             label="Username"
             placeholder="Enter your username"
@@ -81,7 +85,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
       </View>
 
 
-      <View style={{ width: "100%", maxWidth: 400, alignSelf: 'center', marginBottom: 24 }}>
+      <View style={{ width: "100%", maxWidth: 400, alignSelf: 'center', marginBottom: 54 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "100%" }}>
           <PrimaryButton onPress={() => navigation.navigate("Registration")}>
             Create an account

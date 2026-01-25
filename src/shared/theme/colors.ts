@@ -11,7 +11,8 @@ export const Theme = {
 
     secondary: '#2B608B',
     onSecondary: '#FFFFFF',
-
+    tertiary: '#4B9CD3',
+    onTertiary: '#c0c0c0',
     // Layout
     background: '#F8FAFC',
     surface: '#F8FAFC',
