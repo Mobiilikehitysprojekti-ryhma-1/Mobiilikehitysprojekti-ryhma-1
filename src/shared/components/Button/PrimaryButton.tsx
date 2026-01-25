@@ -1,24 +1,33 @@
-// PrimaryButton.tsx
 import { Button, ButtonProps, useTheme } from 'react-native-paper';
 
-export function PrimaryButton(props: ButtonProps) {
+export function PrimaryButton({
+  textColor,
+  buttonColor,
+  style,
+  children,
+  mode = "contained",
+  ...rest
+}: ButtonProps) {
   const theme = useTheme();
-  
+
   return (
     <Button
-      mode="contained"
-      {...props}
+      {...rest}
+
+      mode={mode}
+      buttonColor={buttonColor ?? theme.colors.primary}
+      textColor={textColor ?? theme.colors.onPrimary}
+
       style={[
-        { 
-          borderRadius: 0,
-          padding: 8
+        {
+          borderRadius: 3,
+          borderColor: theme.colors.outline,
+          padding: 8,
         },
-        props.style
+        style,
       ]}
-      textColor={theme.colors.onPrimary}
-      buttonColor={theme.colors.primary}
     >
-      {props.children}
+      {children}
     </Button>
   );
 }

@@ -24,7 +24,8 @@ export default function AppShell() {
         <Stack.Screen name="Login" component={LoginScreen} options={{ 
             title: '', 
             headerStyle: { backgroundColor: Theme.colors.primary},
-            headerShadowVisible: false
+            headerShadowVisible: false,
+            headerShown: false
         }} />
       </Stack.Navigator>
     </NavigationContainer>
