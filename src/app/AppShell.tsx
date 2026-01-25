@@ -3,10 +3,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { RootStackParamList } from '../shared/types/Navigation';
 import { Theme } from "../shared/theme/colors";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import Registration from "../features/screens/Registration";
 import LoginScreen from "../features/screens/LoginScreen";
 import ResetPasswordScreen from "../features/screens/ResetPasswordScreen";
-
+import AdminLoginScreen from "../features/screens/AdminLoginScreen";
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -27,6 +28,14 @@ export default function AppShell() {
             headerStyle: { backgroundColor: Theme.colors.primary},
             headerShadowVisible: false,
             headerShown: false
+        }} />
+
+        <Stack.Screen name="AdminLogin" component={AdminLoginScreen} options={{ 
+            title: 'Back to User Login', 
+            headerStyle: { backgroundColor: Theme.colors.primary},
+            headerShadowVisible: false,
+            headerShown: true,
+            headerTintColor: Theme.colors.onPrimary,
         }} />
 
         <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ 

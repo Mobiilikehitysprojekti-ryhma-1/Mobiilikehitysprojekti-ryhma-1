@@ -7,12 +7,12 @@ import { useState } from "react";
 import { PrimaryButton } from "../../shared/components/Button/PrimaryButton";
 import { FlatInputField } from "../../shared/components/Fields/FlatInputField";
 
-type LoginScreenProps = NativeStackScreenProps<
+type AdminLoginScreenProps = NativeStackScreenProps<
   RootStackParamList,
-  "Login"
+  "AdminLogin"
 >;
 
-export default function LoginScreen({ navigation }: LoginScreenProps) {
+export default function AdminLoginScreen({ navigation }: AdminLoginScreenProps) {
   const theme = useTheme();
   const [hasBiometric, setHasBiometric] = useState(false);
   const [username, setUsername] = useState("");
@@ -31,12 +31,19 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     );
   }
 
+  if (activeRole === "Admin") {
+  }
+
   return (
     <View style={{ flex: 1, paddingTop: 24, backgroundColor: theme.colors.primaryContainer, justifyContent: 'space-between' }}>
 
-      <View style={{ width: "100%", maxWidth: 500, alignSelf: 'center', marginTop: 28 }}>
+      <View style={{ width: "100%", maxWidth: 500, alignSelf: 'center'}}>
+
         {/* Login form */}
-        <View style={{ width: '100%', position: 'absolute', marginTop: 250, padding: 10 }}>
+        <View style={{ width: '100%', position: 'absolute', marginTop: '30%', padding: 10 }}>
+            <Text style={{ fontSize: 24, marginBottom: 24, alignSelf: 'center', color: theme.colors.onPrimary }}>
+              Admin Login
+            </Text>
           <FlatInputField
             label="Username"
             placeholder="Enter your username"
@@ -59,20 +66,8 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
               buttonColor={theme.colors.secondary}
               textColor={theme.colors.onSecondary}
               onPress={() => navigation.navigate("Registration")}>
-              Login as a user
+              Login
             </PrimaryButton>
-          <Text style={{ alignSelf: 'center', marginTop: 16, color: theme.colors.onPrimary }}>
-            or
-          </Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', width: "100%", marginTop: 16 }}>
-            <PrimaryButton 
-              style={{ flex: 1,  }}
-              buttonColor={activeRole === "Admin" ? theme.colors.primary : theme.colors.secondary}
-              textColor={activeRole === "Admin" ? theme.colors.onTertiary : theme.colors.onPrimary}
-              onPress={() => navigation.navigate("AdminLogin")}>
-              Login as admin
-            </PrimaryButton>
-          </View>
 
         </View>
       </View>
