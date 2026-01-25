@@ -31,9 +31,39 @@ export default function ResetPasswordScreen({ navigation }: ResetPasswordScreenP
   return (
     <View style={{ flex: 1, padding: 24, justifyContent: 'space-between' }}>
       <View style={{ width: "100%", maxWidth: 400 }}>
-        <Text style={{ fontSize: 24, marginBottom: 24 }}>
-          Reset Password
-        </Text>
+
+        <InputField
+          label="Email"
+          placeholder="hello@domain.com"
+          onChangeText={setEmail}
+          value={email}
+          keyboardType="email-address"
+        />
+
+        <InputField
+          label="Username"
+          placeholder="Enter your username"
+          onChangeText={setUsername}
+          value={username}
+          keyboardType="default"
+        />
+
+        <InputField
+          label="Password"
+          placeholder="Enter your password"
+          keyboardType="default"
+          onChangeText={setPassword}
+          value={password}
+          secureTextEntry
+        />
+
+        <View style={{ height: 32 }} />
+      
+        <PrimaryButton disabled={!checkRegistrationInputs()}
+          onPress={() =>
+            navigation.navigate("Login")}>
+          Reset credentials
+        </PrimaryButton>
       </View>
     </View>
   );

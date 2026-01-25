@@ -38,8 +38,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "100%", }}>
           <PrimaryButton 
             mode="contained" 
-            style={{ flex: 1, marginRight: 8 }}
-          >
+            style={{ flex: 1, marginRight: 8 }}>
             User
           </PrimaryButton>
 
@@ -88,7 +87,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
             Create an account
           </PrimaryButton>
           
-          <PrimaryButton onPress={() => navigation.navigate("Registration")}>
+          <PrimaryButton onPress={() => navigation.navigate("ResetPassword")}>
             Reset Password
           </PrimaryButton>
         </View>

@@ -5,6 +5,7 @@ import { Theme } from "../shared/theme/colors";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Registration from "../features/screens/Registration";
 import LoginScreen from "../features/screens/LoginScreen";
+import ResetPasswordScreen from "../features/screens/ResetPasswordScreen";
 
 
 
@@ -26,6 +27,13 @@ export default function AppShell() {
             headerStyle: { backgroundColor: Theme.colors.primary},
             headerShadowVisible: false,
             headerShown: false
+        }} />
+
+        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ 
+            title: 'Reset account credentials', 
+            headerTintColor: Theme.colors.onPrimary,
+            headerStyle: { backgroundColor: Theme.colors.primary},
+            headerShadowVisible: false,
         }} />
       </Stack.Navigator>
     </NavigationContainer>
