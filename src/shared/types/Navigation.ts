@@ -4,15 +4,16 @@ export type LoginStackParamList = {
     Login: {message: string} | undefined // Tässä viesti-parametri on valinnainen
     AdminLogin: {message: string} | undefined
     ResetPassword: {message: string} | undefined
+    UserHome: undefined
 }
 
 export type UserStackParamList = {
-    UserHome: undefined;
+    UserHome: undefined
 };
 
 export type AdminStackParamList = {
-    AdminHome: undefined;
-    MealSchedule: undefined;
-    MedSchedule: undefined;
-    LocationSettings: undefined;
+    AdminHome: undefined
+    MealSchedule: undefined
+    MedSchedule: undefined
+    LocationSettings: undefined
 };
