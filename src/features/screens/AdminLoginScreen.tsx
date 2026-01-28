@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useTheme } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { LoginStackParamList } from "../../shared/types/Navigation";
@@ -31,6 +31,7 @@ export default function AdminLoginScreen({ navigation }: AdminLoginScreenProps) 
   }
 
   return (
+  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={{ flex: 1, paddingTop: 24, backgroundColor: theme.colors.primaryContainer, justifyContent: 'space-between' }}>
 
       <View style={{ width: "100%", maxWidth: 500, alignSelf: 'center'}}>
@@ -81,5 +82,6 @@ export default function AdminLoginScreen({ navigation }: AdminLoginScreenProps) 
         </View>
       </View>
     </View>
+  </TouchableWithoutFeedback>
   );
 }

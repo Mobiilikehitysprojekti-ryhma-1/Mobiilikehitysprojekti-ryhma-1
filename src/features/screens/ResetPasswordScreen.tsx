@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { LoginStackParamList } from "../../shared/types/Navigation";
 import { useState } from "react";
@@ -29,6 +29,7 @@ export default function ResetPasswordScreen({ navigation }: ResetPasswordScreenP
   }
 
   return (
+  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={{ flex: 1, padding: 24, justifyContent: 'space-between' }}>
       <View style={{ width: "100%", maxWidth: 400 }}>
 
@@ -66,5 +67,6 @@ export default function ResetPasswordScreen({ navigation }: ResetPasswordScreenP
         </PrimaryButton>
       </View>
     </View>
+  </TouchableWithoutFeedback>
   );
 }
