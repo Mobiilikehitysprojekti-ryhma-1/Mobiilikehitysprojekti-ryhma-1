@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../shared/types/Navigation";
+import { LoginStackParamList } from "../../shared/types/Navigation";
 import { useState } from "react";
 
 import { PrimaryButton } from "../../shared/components/Button/PrimaryButton";
@@ -11,7 +11,7 @@ import { useTheme } from "react-native-paper";
 
 
 type ResetPasswordScreenProps = NativeStackScreenProps<
-  RootStackParamList,
+  LoginStackParamList,
   "ResetPassword"
 >;
 

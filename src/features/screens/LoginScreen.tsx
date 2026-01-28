@@ -1,14 +1,14 @@
 import { View, Text } from "react-native";
 import { useTheme } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../shared/types/Navigation";
+import { LoginStackParamList } from "../../shared/types/Navigation";
 import { useState } from "react";
 
 import { PrimaryButton } from "../../shared/components/Button/PrimaryButton";
 import { FlatInputField } from "../../shared/components/Fields/FlatInputField";
 
 type LoginScreenProps = NativeStackScreenProps<
-  RootStackParamList,
+  LoginStackParamList,
   "Login"
 >;
 
