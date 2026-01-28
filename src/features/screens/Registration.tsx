@@ -30,9 +30,6 @@ export default function RegistrationScreen({ navigation }: RegistrationScreenPro
   return (
     <View style={{ flex: 1, padding: 24, justifyContent: 'space-between' }}>
       <View style={{ width: "100%", maxWidth: 400 }}>
-        <Text style={{ fontSize: 24, marginBottom: 24 }}>
-          Login
-        </Text>
 
         <InputField
           label="Email"

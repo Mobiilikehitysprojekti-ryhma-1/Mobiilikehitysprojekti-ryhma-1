@@ -34,9 +34,13 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   return (
     <View style={{ flex: 1, paddingTop: 24, backgroundColor: theme.colors.primaryContainer, justifyContent: 'space-between' }}>
 
-      <View style={{ width: "100%", maxWidth: 500, alignSelf: 'center', marginTop: 28 }}>
+      <View style={{ width: "100%", maxWidth: 500, alignSelf: 'center' }}>
+        
         {/* Login form */}
         <View style={{ width: '100%', position: 'absolute', marginTop: 250, padding: 10 }}>
+          <Text style={{ fontSize: 24, marginBottom: 24, alignSelf: 'center', color: theme.colors.onPrimary }}>
+              User Login
+          </Text>
           <FlatInputField
             label="Username"
             placeholder="Enter your username"
