@@ -17,7 +17,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [hasBiometric, setHasBiometric] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [activeRole, setActiveRole] = useState<"User" | "Admin">("User");
 
   function checkLoginInputs() {
     return username.trim() !== "" && password.trim() !== "";
@@ -71,8 +70,8 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           <View style={{ flexDirection: 'row', justifyContent: 'center', width: "100%", marginTop: 16 }}>
             <PrimaryButton 
               style={{ flex: 1,  }}
-              buttonColor={activeRole === "Admin" ? theme.colors.primary : theme.colors.secondary}
-              textColor={activeRole === "Admin" ? theme.colors.onTertiary : theme.colors.onPrimary}
+              buttonColor={theme.colors.secondary}
+              textColor={theme.colors.onPrimary}
               onPress={() => navigation.navigate("AdminLogin")}>
               Login as admin
             </PrimaryButton>
