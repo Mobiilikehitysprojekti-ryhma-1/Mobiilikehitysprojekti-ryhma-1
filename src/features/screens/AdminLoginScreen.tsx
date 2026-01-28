@@ -17,7 +17,6 @@ export default function AdminLoginScreen({ navigation }: AdminLoginScreenProps) 
   const [hasBiometric, setHasBiometric] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [activeRole, setActiveRole] = useState<"User" | "Admin">("User");
 
   function checkLoginInputs() {
     return username.trim() !== "" && password.trim() !== "";
@@ -29,9 +28,6 @@ export default function AdminLoginScreen({ navigation }: AdminLoginScreenProps) 
         {/* if user has biometric authentication render biometric login screen here */}
       </View>
     );
-  }
-
-  if (activeRole === "Admin") {
   }
 
   return (
