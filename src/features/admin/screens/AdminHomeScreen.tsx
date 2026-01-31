@@ -182,11 +182,11 @@ export function AdminHomeScreen({}: Props) {
 
   return (
     <View style={{ padding: 16, gap: 12 }}>
-      <Text variant="bodyMedium">Admin home screen</Text>
+      <Text variant="bodyMedium">ADMIN home screen</Text>
       <Text variant="bodySmall" style={{ fontWeight: "bold", color: "red" }}>User ID: {user.uid}</Text>
 
       <Button mode="outlined" onPress={() => setMode("user")}>
-        Siirry käyttäjäpuoleen
+        Siirry USER näkymään
       </Button>
       
       {/* Daily Status Display */}
