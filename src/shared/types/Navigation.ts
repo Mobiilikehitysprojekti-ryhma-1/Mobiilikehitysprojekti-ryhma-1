@@ -1,10 +1,9 @@
 
 export type LoginStackParamList = {
-    Registration: undefined
-    Login: {message: string} | undefined // Tässä viesti-parametri on valinnainen
-    AdminLogin: {message: string} | undefined
-    ResetPassword: {message: string} | undefined
-    UserHome: undefined
+    Registration: undefined;
+    Login: { message: string } | undefined;
+    AdminLogin: { message: string } | undefined;
+    ResetPassword: { message: string } | undefined;
 }
 
 export type UserStackParamList = {

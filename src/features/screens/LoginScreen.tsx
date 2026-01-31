@@ -9,14 +9,12 @@ import { PrimaryButton } from "../../shared/components/Button/PrimaryButton";
 import { FlatInputField } from "../../shared/components/Fields/FlatInputField";
 
 
-type LoginScreenProps = NativeStackScreenProps<
-  LoginStackParamList,
-  "Login"
->;
+type LoginScreenProps = NativeStackScreenProps<LoginStackParamList, "Login"> & {
+  onUserLogin: () => void;
+};
 
-export default function LoginScreen({ navigation }: LoginScreenProps) {
+export default function LoginScreen({ navigation, onUserLogin }: LoginScreenProps) {
   const theme = useTheme();
-  const rootNavigator = useNavigation();
 
   const [hasBiometric, setHasBiometric] = useState(false);
   const [username, setUsername] = useState("");
@@ -35,12 +33,10 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   }
 
   return (
-  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <View style={{ flex: 1, paddingTop: 24, backgroundColor: theme.colors.primaryContainer, justifyContent: 'space-between' }}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={{ flex: 1, paddingTop: 24, backgroundColor: theme.colors.primaryContainer, justifyContent: 'space-between' }}>
 
-      <View style={{ width: "100%", maxWidth: 500, alignSelf: 'center' }}>
-
-          {/* Login form */}
+        <View style={{ width: "100%", maxWidth: 500, alignSelf: 'center' }}>
           <View style={{ width: '100%', position: 'absolute', marginTop: 250, padding: 10 }}>
             <Text style={{ fontSize: 24, marginBottom: 24, alignSelf: 'center', color: theme.colors.onPrimary }}>
               User Login
@@ -67,11 +63,9 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
               buttonColor={theme.colors.secondary}
               textColor={theme.colors.onSecondary}
               onPress={() => {
-                // Placeholder auth check
-                if (username == "User" && password == "Password") {
-                  navigation.navigate("UserHome");
-                }
-                else {
+                if (username === "User" && password === "Password") {
+                  onUserLogin(); // This triggers the Stack switch
+                } else {
                   alert("Invalid credentials");
                 }
               }}>
@@ -90,21 +84,21 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
               </PrimaryButton>
             </View>
           </View>
-      </View>
+        </View>
 
 
-      <View style={{ width: "100%", maxWidth: 400, alignSelf: 'center', marginBottom: 54 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "100%" }}>
-          <PrimaryButton onPress={() => navigation.navigate("Registration")}>
-            Create an account
-          </PrimaryButton>
+        <View style={{ width: "100%", maxWidth: 400, alignSelf: 'center', marginBottom: 54 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "100%" }}>
+            <PrimaryButton onPress={() => navigation.navigate("Registration")}>
+              Create an account
+            </PrimaryButton>
 
-          <PrimaryButton onPress={() => navigation.navigate("ResetPassword")}>
-            Reset Password
-          </PrimaryButton>
+            <PrimaryButton onPress={() => navigation.navigate("ResetPassword")}>
+              Reset Password
+            </PrimaryButton>
+          </View>
         </View>
       </View>
-    </View>
     </TouchableWithoutFeedback>
 
   );
