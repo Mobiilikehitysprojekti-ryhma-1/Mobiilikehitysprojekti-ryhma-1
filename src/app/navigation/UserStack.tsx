@@ -11,7 +11,7 @@ const Tab = createBottomTabNavigator<UserStackParamList>();
 export function UserStack() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} options={{ title: "Koti" }} />
+      <Tab.Screen name="Home" component={HomeScreen} options={{ title: "USER home" }} />
       <Tab.Screen name="Measurements" component={MeasurementsScreen} options={{ title: "Mittaukset" }} />
       <Tab.Screen name="Safety" component={SafetyScreen} options={{ title: "Turvallisuus" }} />
       <Tab.Screen name="Tasks" component={TasksScreen} options={{ title: "Tehtävät" }} />

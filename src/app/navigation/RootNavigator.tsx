@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuthSession } from "../../features/auth/state/authSession";
-import { AppModeProvider } from "../../shared/context/appModeContext";
+import { AppModeProvider, useAppMode } from "../../shared/context/appModeContext";
 import AuthNavigator from "./auth/AuthNavigator";
 import ModeNavigator from "./ModeNavigator";
 
@@ -9,10 +9,15 @@ export type RootStackParamList = {
     App: undefined;
 };
 
+function LoggedInAppContent() {
+    const { resetKey } = useAppMode();
+    return <ModeNavigator key={resetKey} />;
+}
+
 function LoggedInApp() {
     return (
         <AppModeProvider>
-            <ModeNavigator />
+            <LoggedInAppContent />
         </AppModeProvider>
     );
 }

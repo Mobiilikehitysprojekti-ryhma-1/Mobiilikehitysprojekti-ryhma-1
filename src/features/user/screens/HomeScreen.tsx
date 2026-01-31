@@ -5,7 +5,7 @@ import { useAppMode } from "../../../shared/context/appModeContext";
 import { useAuth } from "../../../shared/hooks/useAuth";
 
 export default function HomeScreen() {
-    const { setMode } = useAppMode();
+    const { setMode, resetToModePicker } = useAppMode();
     const { user } = useAuth();
     return (
         <View style={{ flex: 1 }}>
@@ -19,6 +19,9 @@ export default function HomeScreen() {
             <Text variant="bodySmall" style={{ fontWeight: "bold", color: "red" }}>User ID: {user?.uid}</Text>
                 <Button mode="contained" onPress={() => setMode("admin")}>
                     Siirry ADMIN näkymään
+                </Button>
+                <Button mode="outlined" onPress={resetToModePicker}>
+                    Valitse oletustila uudelleen (User/Admin)
                 </Button>
                 <Button mode="contained" onPress={logout}>
                     Kirjaudu ulos tililtä

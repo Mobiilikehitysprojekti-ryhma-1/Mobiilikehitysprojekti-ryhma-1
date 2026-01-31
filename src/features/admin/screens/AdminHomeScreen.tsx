@@ -16,7 +16,7 @@ type Props = BottomTabScreenProps<AdminStackParamList, "AdminHome">;
 
 export function AdminHomeScreen({}: Props) {
 	const { user } = useAuth();
-	const { setMode } = useAppMode();
+	const { setMode, resetToModePicker } = useAppMode();
 	
 	// State layer - handles all business logic and data access
 	const adminHome = useAdminHome(user?.uid);
@@ -187,6 +187,9 @@ export function AdminHomeScreen({}: Props) {
 
       <Button mode="outlined" onPress={() => setMode("user")}>
         Siirry USER näkymään
+      </Button>
+      <Button mode="outlined" onPress={resetToModePicker}>
+        Valitse oletustila uudelleen (User/Admin)
       </Button>
       
       {/* Daily Status Display */}

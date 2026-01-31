@@ -6,11 +6,12 @@ import ModePickerScreen from "./ModePickerScreen";
 import { UserStack } from "./UserStack";
 
 /**
- * After login: shows a picker (User / Admin). Once chosen, shows either
- * User stack (Home) or Admin stack. Choice is remembered for next session.
+ * After login: shows a picker (User / Admin) only when no mode is stored.
+ * Once chosen, shows either User stack (Home) or Admin stack. Choice is
+ * saved and restored next session (picker is skipped when restored).
  */
 export default function ModeNavigator() {
-  const { mode, ready } = useAppMode();
+  const { mode, ready, restoredFromStorage } = useAppMode();
   const [chosen, setChosen] = useState(false);
 
   if (!ready) {
@@ -21,7 +22,8 @@ export default function ModeNavigator() {
     );
   }
 
-  if (!chosen) {
+  const skipPicker = chosen || restoredFromStorage;
+  if (!skipPicker) {
     return <ModePickerScreen onChosen={() => setChosen(true)} />;
   }
 
