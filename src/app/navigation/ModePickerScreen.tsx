@@ -22,14 +22,14 @@ export default function ModePickerScreen({ onChosen }: Props) {
           onPress={() => choose("user")}
         >
           <Text style={styles.buttonText}>User</Text>
-          <Text style={styles.hint}>(Ei tehty vielä)</Text>
+          <Text style={styles.hint}>Koti, Mittaukset, Turvallisuus, Tehtävät</Text>
         </Pressable>
         <Pressable
           style={({ pressed }) => [styles.button, styles.adminButton, pressed && styles.pressed]}
           onPress={() => choose("admin")}
         >
           <Text style={styles.buttonText}>Admin</Text>
-          <Text style={styles.hint}>(Tehty)</Text>
+          <Text style={styles.hint}>Ruoka, Lääkkeet, Sijainti</Text>
         </Pressable>
       </View>
     </View>

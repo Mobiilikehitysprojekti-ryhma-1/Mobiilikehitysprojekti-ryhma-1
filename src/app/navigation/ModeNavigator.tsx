@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { useAppMode } from "../../shared/context/appModeContext";
-import AppNavigator from "./app/AppNavigator";
 import { AdminStack } from "./AdminStack";
 import ModePickerScreen from "./ModePickerScreen";
+import { UserStack } from "./UserStack";
 
 /**
  * After login: shows a picker (User / Admin). Once chosen, shows either
@@ -25,5 +25,5 @@ export default function ModeNavigator() {
     return <ModePickerScreen onChosen={() => setChosen(true)} />;
   }
 
-  return mode === "admin" ? <AdminStack /> : <AppNavigator />;
+  return mode === "admin" ? <AdminStack /> : <UserStack />;
 }
