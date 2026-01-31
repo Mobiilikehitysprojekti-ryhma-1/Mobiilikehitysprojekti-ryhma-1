@@ -1,12 +1,21 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuthSession } from "../../features/auth/state/authSession";
+import { AppModeProvider } from "../../shared/context/appModeContext";
 import AuthNavigator from "./auth/AuthNavigator";
-import AppNavigator from "./app/AppNavigator";
+import ModeNavigator from "./ModeNavigator";
 
 export type RootStackParamList = {
-    Auth: undefined;
+    Pending: undefined;
     App: undefined;
 };
+
+function LoggedInApp() {
+    return (
+        <AppModeProvider>
+            <ModeNavigator />
+        </AppModeProvider>
+    );
+}
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -18,9 +27,9 @@ export default function RootNavigator() {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             {showApp ? (
-                <Stack.Screen name="App" component={AppNavigator} />
+                <Stack.Screen name="App" component={LoggedInApp} />
             ) : (
-                <Stack.Screen name="Auth" component={AuthNavigator} />
+                <Stack.Screen name="Pending" component={AuthNavigator} />
             )}
         </Stack.Navigator>
     );

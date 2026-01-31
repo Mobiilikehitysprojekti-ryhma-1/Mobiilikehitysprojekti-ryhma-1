@@ -1,9 +1,10 @@
 import React from "react";
-import { View, ActivityIndicator } from "react-native";
+import { View } from "react-native";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { AdminStackParamList } from "../navigation/types";
 import { Button, Text } from "react-native-paper";
 import { useAuth } from "../../../shared/hooks/useAuth";
+import { useAppMode } from "../../../shared/context/appModeContext";
 import { useMeals } from "../state/mealsStore";
 import { useMeds } from "../state/medsStore";
 import { useLocation } from "../state/locationStore";
@@ -14,7 +15,8 @@ import { DailyStatusDisplay } from "../components/DailyStatusDisplay";
 type Props = BottomTabScreenProps<AdminStackParamList, "AdminHome">;
 
 export function AdminHomeScreen({}: Props) {
-	const { user, loading: authLoading, error: authError } = useAuth();
+	const { user } = useAuth();
+	const { setMode } = useAppMode();
 	
 	// State layer - handles all business logic and data access
 	const adminHome = useAdminHome(user?.uid);
@@ -170,24 +172,6 @@ export function AdminHomeScreen({}: Props) {
     }
   };
 
-  if (authLoading) {
-    return (
-      <View style={{ padding: 16, gap: 12, alignItems: "center", justifyContent: "center", flex: 1 }}>
-        <ActivityIndicator size="large" />
-        <Text variant="bodyMedium">Signing in anonymously...</Text>
-      </View>
-    );
-  }
-
-  if (authError) {
-    return (
-      <View style={{ padding: 16, gap: 12 }}>
-        <Text variant="headlineSmall" style={{ color: "red" }}>Authentication Error</Text>
-        <Text variant="bodyMedium">{authError}</Text>
-      </View>
-    );
-  }
-
   if (!user) {
     return (
       <View style={{ padding: 16, gap: 12 }}>
@@ -200,7 +184,10 @@ export function AdminHomeScreen({}: Props) {
     <View style={{ padding: 16, gap: 12 }}>
       <Text variant="bodyMedium">Admin home screen</Text>
       <Text variant="bodySmall" style={{ fontWeight: "bold", color: "red" }}>User ID: {user.uid}</Text>
-      <Text variant="bodySmall" style={{ fontWeight: "bold", color: "red" }}>Anonymous: {user.isAnonymous ? "Yes" : "No"}</Text>
+
+      <Button mode="outlined" onPress={() => setMode("user")}>
+        Siirry käyttäjäpuoleen
+      </Button>
       
       {/* Daily Status Display */}
       <Text variant="titleMedium" style={{ marginTop: 16, marginBottom: 8 }}>Daily Status</Text>
