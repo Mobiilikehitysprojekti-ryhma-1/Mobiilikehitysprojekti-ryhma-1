@@ -1,3 +1,5 @@
+import React from "react";
+import { Theme } from "../shared/theme/colors";
 import { useEffect, useState } from "react";
 import { View, ActivityIndicator, AppState } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -32,7 +34,7 @@ export default function AppShell() {
     }
 
     return (
-        <PaperProvider>
+        <PaperProvider theme={Theme}>
             <NavigationContainer>
                 <RootNavigator />
             </NavigationContainer>
