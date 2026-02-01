@@ -12,7 +12,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
     const { user, unlocked } = useAuthSession();
-
     const showApp = Boolean(user) && unlocked;
 
     return (
