@@ -26,13 +26,23 @@ export function AppModeProvider({ children }: { children: React.ReactNode }) {
     const [resetKey, setResetKey] = useState(0);
 
     useEffect(() => {
+        let cancelled = false;
         SecureStore.getItemAsync(STORAGE_KEY).then((stored) => {
-            if (stored === "admin" || stored === "user") {
-                setModeState(stored);
+            if (cancelled) return;
+            // Only restore when we have a valid stored preference; first time (no value) → show picker
+            const value = typeof stored === "string" ? stored.trim() : null;
+            const hasStoredPreference = value === "admin" || value === "user";
+            if (hasStoredPreference) {
+                setModeState(value as AppMode);
                 setRestoredFromStorage(true);
+            } else {
+                setRestoredFromStorage(false);
             }
             setReady(true);
         });
+        return () => {
+            cancelled = true;
+        };
     }, []);
 
     const setMode = useCallback(async (newMode: AppMode) => {

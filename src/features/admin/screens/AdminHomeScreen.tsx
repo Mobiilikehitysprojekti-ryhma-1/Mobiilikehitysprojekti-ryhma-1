@@ -1,8 +1,9 @@
 import React from "react";
 import { View } from "react-native";
+import { useTheme, Text } from "react-native-paper";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { AdminStackParamList } from "../navigation/types";
-import { Button, Text } from "react-native-paper";
+import { logout } from "../../auth/state/authActions";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useAppMode } from "../../../shared/context/appModeContext";
 import { useMeals } from "../state/mealsStore";
@@ -11,13 +12,16 @@ import { useLocation } from "../state/locationStore";
 import { useAdminHome } from "../state/adminHomeStore";
 import { useDailyStatus } from "../state/dailyStatusStore";
 import { DailyStatusDisplay } from "../components/DailyStatusDisplay";
+import { PrimaryButton } from "../../../shared/components/Button/PrimaryButton";
 
 type Props = BottomTabScreenProps<AdminStackParamList, "AdminHome">;
 
 export function AdminHomeScreen({}: Props) {
+	const theme = useTheme();
 	const { user } = useAuth();
-	const { setMode, resetToModePicker } = useAppMode();
-	
+	const { mode, setMode, resetToModePicker } = useAppMode();
+	const oletustilaLabel = mode === "admin" ? "Admin" : "Käyttäjä";
+
 	// State layer - handles all business logic and data access
 	const adminHome = useAdminHome(user?.uid);
 	const meals = useMeals(user?.uid);
@@ -62,7 +66,7 @@ export function AdminHomeScreen({}: Props) {
           "Mannerheimintie 1, Helsinki, Finland",
           150
         );
-        
+
         if (geocodeResult && geocodeResult.success) {
           console.log("✓ Geocoding successful!");
           console.log("  Formatted Address:", geocodeResult.formattedAddress);
@@ -80,7 +84,7 @@ export function AdminHomeScreen({}: Props) {
 
       // 6) Load location from database and display like real version
       await location.loadLocation();
-      
+
       if (location.error) {
         console.error("✗ Error loading location:", location.error);
       } else if (location.location?.home) {
@@ -101,7 +105,7 @@ export function AdminHomeScreen({}: Props) {
       const today = new Date();
       const yesterday = new Date(today);
       yesterday.setDate(yesterday.getDate() - 1);
-      
+
       const todayStr = today.toISOString().split("T")[0];
       const yesterdayStr = yesterday.toISOString().split("T")[0];
 
@@ -174,53 +178,125 @@ export function AdminHomeScreen({}: Props) {
 
   if (!user) {
     return (
-      <View style={{ padding: 16, gap: 12 }}>
-        <Text variant="bodyMedium">No user found</Text>
+      <View
+        style={{
+          flex: 1,
+          padding: 16,
+          gap: 12,
+          backgroundColor: theme.colors.primaryContainer,
+        }}
+      >
+        <Text style={{ color: theme.colors.onPrimary }} variant="bodyMedium">
+          No user found
+        </Text>
       </View>
     );
   }
 
   return (
-    <View style={{ padding: 16, gap: 12 }}>
-      <Text variant="bodyMedium">ADMIN home screen</Text>
-      <Text variant="bodySmall" style={{ fontWeight: "bold", color: "red" }}>User ID: {user.uid}</Text>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: 24,
+        padding: 16,
+        gap: 12,
+        backgroundColor: theme.colors.primaryContainer,
+      }}
+    >
+      <Text
+        style={{ color: theme.colors.onPrimary }}
+        variant="bodyMedium"
+      >
+        ADMIN home screen
+      </Text>
+      <Text
+        style={{
+          fontWeight: "bold",
+          color: theme.colors.onPrimary,
+          opacity: 0.9,
+        }}
+        variant="bodySmall"
+      >
+        User ID: {user.uid}
+      </Text>
+      <Text
+        style={{ color: theme.colors.onPrimary, opacity: 0.9 }}
+        variant="bodySmall"
+      >
+        Nykyinen oletustila: {oletustilaLabel}
+      </Text>
 
-      <Button mode="outlined" onPress={() => setMode("user")}>
+      <PrimaryButton
+        mode="outlined"
+        buttonColor={theme.colors.surface}
+        textColor={theme.colors.onSurface}
+        onPress={() => setMode("user")}
+      >
         Siirry USER näkymään
-      </Button>
-      <Button mode="outlined" onPress={resetToModePicker}>
-        Valitse oletustila uudelleen (User/Admin)
-      </Button>
-      
+      </PrimaryButton>
+      <PrimaryButton
+        mode="outlined"
+        buttonColor={theme.colors.error}
+        textColor={theme.colors.onError}
+        onPress={resetToModePicker}
+      >
+        Tyhjennä oletustila (poista tallennettu valinta)
+      </PrimaryButton>
+      <PrimaryButton
+        mode="contained"
+        buttonColor={theme.colors.secondary}
+        textColor={theme.colors.onSecondary}
+        onPress={logout}
+      >
+        Kirjaudu ulos tililtä
+      </PrimaryButton>
+
       {/* Daily Status Display */}
-      <Text variant="titleMedium" style={{ marginTop: 16, marginBottom: 8 }}>Daily Status</Text>
+      <Text
+        style={{ marginTop: 16, marginBottom: 8, color: theme.colors.onPrimary }}
+        variant="titleMedium"
+      >
+        Daily Status
+      </Text>
       {dailyStatus.error && (
-        <Text variant="bodySmall" style={{ color: "red", marginBottom: 8 }}>
+        <Text
+          style={{ color: theme.colors.error, marginBottom: 8 }}
+          variant="bodySmall"
+        >
           Error: {dailyStatus.error}
         </Text>
       )}
-      <DailyStatusDisplay 
-        statuses={dailyStatus.statuses} 
+      <DailyStatusDisplay
+        statuses={dailyStatus.statuses}
         loading={dailyStatus.loading}
       />
-      
-      <Button 
-        mode="contained" 
-        onPress={adminHome.checkConnection}
+
+      <PrimaryButton
         disabled={adminHome.isChecking}
+        buttonColor={theme.colors.secondary}
+        textColor={theme.colors.onSecondary}
+        onPress={adminHome.checkConnection}
       >
         {adminHome.isChecking ? "Checking..." : "Check Firebase Connection"}
-      </Button>
-      
+      </PrimaryButton>
+
       {adminHome.connectionStatus ? (
-        <Text variant="bodyMedium" style={{ marginTop: 8 }}>
+        <Text
+          style={{ marginTop: 8, color: theme.colors.onPrimary }}
+          variant="bodyMedium"
+        >
           {adminHome.connectionStatus}
         </Text>
       ) : null}
 
-      <Button mode="contained" onPress={runTest} disabled={!user}>
+      <PrimaryButton
+        disabled={!user}
+        buttonColor={theme.colors.secondary}
+        textColor={theme.colors.onSecondary}
+        onPress={runTest}
+      >
         Testaa Firestore get/set testidatalla
-      </Button>
+      </PrimaryButton>
     </View>
   );
 }

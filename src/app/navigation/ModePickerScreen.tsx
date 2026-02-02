@@ -9,8 +9,11 @@ export default function ModePickerScreen({ onChosen }: Props) {
   const { setMode } = useAppMode();
 
   const choose = async (mode: "user" | "admin") => {
-    await setMode(mode);
-    onChosen();
+    try {
+      await setMode(mode);
+    } finally {
+      onChosen();
+    }
   };
 
   return (

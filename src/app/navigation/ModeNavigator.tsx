@@ -6,7 +6,7 @@ import ModePickerScreen from "./ModePickerScreen";
 import { UserStack } from "./UserStack";
 
 /**
- * After login: shows a picker (User / Admin) only when no mode is stored.
+ * After login: shows "Valitse oletustila" (User / Admin) the first time when no mode is stored.
  * Once chosen, shows either User stack (Home) or Admin stack. Choice is
  * saved and restored next session (picker is skipped when restored).
  */
@@ -22,8 +22,9 @@ export default function ModeNavigator() {
     );
   }
 
-  const skipPicker = chosen || restoredFromStorage;
-  if (!skipPicker) {
+  // Show picker when: first time (no stored preference) or user hasn't chosen this session
+  const showPicker = !chosen && !restoredFromStorage;
+  if (showPicker) {
     return <ModePickerScreen onChosen={() => setChosen(true)} />;
   }
 
