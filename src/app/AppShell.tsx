@@ -5,14 +5,18 @@ import { View, ActivityIndicator, AppState } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { PaperProvider } from "react-native-paper";
 import RootNavigator from "./navigation/RootNavigator";
+//initAuthListener listens authentication state
+//lockapp locks application
 import { initAuthListener, lockApp } from "../features/auth/state/authSession";
 
 export default function AppShell() {
+    //app is starting and authentication is being checked
     const [booting, setBooting] = useState(true);
 
     useEffect(() => {
         const unsub = initAuthListener(() => setBooting(false));
 
+        //locks application for security reasons
         const sub = AppState.addEventListener("change", (next) => {
             if (next === "background" || next === "inactive") {
                 lockApp();
@@ -25,6 +29,7 @@ export default function AppShell() {
         };
     }, []);
 
+    //Shows loading icon when app is booting
     if (booting) {
         return (
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>

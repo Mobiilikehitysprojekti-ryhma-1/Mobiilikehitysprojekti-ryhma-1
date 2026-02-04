@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { UserStackParamList } from "../../shared/types/Navigation";
-import UserHomeScreen from "../../features/screens/UserHomeScreen";
+import UserHomeScreen from "../../features/home/screens/UserHomeScreen";
 import { Theme } from "../../shared/theme/colors";
 
 const Stack = createNativeStackNavigator<UserStackParamList>()

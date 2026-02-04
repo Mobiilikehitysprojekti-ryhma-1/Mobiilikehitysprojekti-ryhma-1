@@ -9,11 +9,11 @@ export default function UnlockScreen() {
             <Text variant="headlineMedium">Avaa sovellus</Text>
 
             <Button mode="contained" onPress={() => requestUnlock()}>
-                Avaa
+                Open
             </Button>
 
             <Button mode="text" onPress={() => logout()}>
-                Kirjaudu ulos
+                Log out
             </Button>
         </View>
     );

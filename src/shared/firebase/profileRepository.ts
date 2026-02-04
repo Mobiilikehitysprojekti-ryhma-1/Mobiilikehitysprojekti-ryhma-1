@@ -1,9 +1,11 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebaseClient";
 
-export async function createUserProfile(uid: string, data: { email: string }) {
+export async function createUserProfile(uid: string, data: { email: string, username: string, role: string }) {
     await setDoc(doc(db, "users", uid), {
         email: data.email,
+        username: data.username,
+        role: data.role,
         createdAt: Date.now(),
     });
 }

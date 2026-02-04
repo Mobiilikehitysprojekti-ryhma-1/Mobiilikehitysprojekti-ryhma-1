@@ -3,7 +3,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AdminStackParamList } from "../../shared/types/Navigation";
 
-import AdminHomeScreen from "../../features/screens/AdminHomeScreen";
+import AdminHomeScreen from "../../features/auth/screens/AdminHomeScreen";
 // Commented out since I dont have these:
 //import { MealScheduleScreen } from "../../features/admin/screens/MealScheduleScreen";
 //import { MedScheduleScreen } from "../../features/admin/screens/MedScheduleScreen";

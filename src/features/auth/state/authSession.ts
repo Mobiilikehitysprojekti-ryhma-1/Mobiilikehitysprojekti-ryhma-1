@@ -2,14 +2,22 @@ import { useSyncExternalStore } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../../shared/firebase/firebaseClient";
 import { ensureUnlockedOnLaunch, clearLocalUnlock } from "../data/localUnlock";
-import { fetchUserProfile } from "../../../shared/firebase/profileRepository";
+import { fetchUserProfile, createUserProfile } from "../../../shared/firebase/profileRepository";
 
+
+type Role = "admin" | "user";
+
+//Authentication logic is handled here with Firebase and React
 type AuthState = {
-  user: { uid: string } | null;
+  user: { uid: string, role: Role } | null;
   unlocked: boolean;
 };
 
-let state: AuthState = { user: null, unlocked: false };
+//Global auth state
+let state: AuthState = {
+  user: null,
+  unlocked: false
+};
 const listeners = new Set<() => void>();
 
 function setState(partial: Partial<AuthState>) {
@@ -17,6 +25,7 @@ function setState(partial: Partial<AuthState>) {
   listeners.forEach((l) => l());
 }
 
+//Hook that is used for reading the auth state
 export function useAuthSession() {
   return useSyncExternalStore(
     (cb) => {
@@ -27,22 +36,38 @@ export function useAuthSession() {
   );
 }
 
+
+//Initializes Firebase listener
 export function initAuthListener(onReady: () => void) {
   let readyCalled = false;
 
-  const unsub = onAuthStateChanged(auth, async (fbUser) => {
-    if (!fbUser) {
-      await clearLocalUnlock();
-      setState({ user: null, unlocked: false });
-    } else {
-      const unlocked = await ensureUnlockedOnLaunch();
-      await fetchUserProfile(fbUser.uid);
-      setState({ user: { uid: fbUser.uid }, unlocked });
-    }
+  const unsub = onAuthStateChanged(auth, async (fbUser) => { //fb = firebase user
+    try {
+      if (!fbUser) {
+        await clearLocalUnlock();
+        setState({ user: null, unlocked: false });
+      } else {
+        const unlocked = await ensureUnlockedOnLaunch();
+        const profile = await fetchUserProfile(fbUser.uid);
 
-    if (!readyCalled) {
-      readyCalled = true;
-      onReady();
+        //Handle roles
+        if (!profile) {
+          await createUserProfile(fbUser.uid, {
+            email: fbUser.email ?? "",
+            username: "",
+            role: "user",
+          });
+          setState({ user: { uid: fbUser.uid, role: "user" }, unlocked });
+        } else {
+          const role: Role = profile.role === "admin" ? "admin" : "user";
+          setState({ user: { uid: fbUser.uid, role }, unlocked });
+        }
+      }
+    } finally {
+      if (!readyCalled) {
+        readyCalled = true;
+        onReady();
+      }
     }
   });
 

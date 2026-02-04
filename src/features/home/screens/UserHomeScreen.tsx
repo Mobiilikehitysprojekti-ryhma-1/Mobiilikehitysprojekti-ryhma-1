@@ -2,10 +2,10 @@ import { View, Text } from "react-native";
 import { useState } from "react";
 import { Icon, useTheme } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { UserStackParamList } from "../../shared/types/Navigation";
+import { UserStackParamList } from "../../../shared/types/Navigation";
 
-import { PrimaryButton } from "../../shared/components/Button/PrimaryButton";
-import { FlatInputField } from "../../shared/components/Fields/FlatInputField";
+import { PrimaryButton } from "../../../shared/components/Button/PrimaryButton";
+import { FlatInputField } from "../../../shared/components/Fields/FlatInputField";
 
 
 type UserHomeScreenProps = NativeStackScreenProps<

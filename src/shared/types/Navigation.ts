@@ -1,4 +1,3 @@
-
 export type LoginStackParamList = {
     Registration: undefined;
     Login: { message: string } | undefined;

@@ -1,16 +1,10 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "../../../features/home/screens/HomeScreen";
-
-export type AppStackParamList = {
-  Home: undefined;
-};
-
-const Stack = createNativeStackNavigator<AppStackParamList>();
+import { useAuthSession } from "../../../features/auth/state/authSession";
+import AdminStack from "../AdminStack";
+import UserStack from "../UserStack";
 
 export default function AppNavigator() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
-    </Stack.Navigator>
-  );
+  const { user } = useAuthSession();
+  if (!user) return null;
+
+  return user.role === "admin" ? <AdminStack /> : <UserStack />;
 }

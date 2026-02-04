@@ -1,11 +1,11 @@
 import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { LoginStackParamList } from "../../shared/types/Navigation";
+import { LoginStackParamList } from "../../../shared/types/Navigation";
 import { useState } from "react";
 
-import { PrimaryButton } from "../../shared/components/Button/PrimaryButton";
-import { SecondaryButton } from "../../shared/components/Button/SecondaryButton";
-import { InputField } from "../../shared/components/Fields/InputField";
+import { PrimaryButton } from "../../../shared/components/Button/PrimaryButton";
+import { SecondaryButton } from "../../../shared/components/Button/SecondaryButton";
+import { InputField } from "../../../shared/components/Fields/InputField";
 import { useTheme } from "react-native-paper";
 
 
@@ -39,14 +39,6 @@ export default function ResetPasswordScreen({ navigation }: ResetPasswordScreenP
           onChangeText={setEmail}
           value={email}
           keyboardType="email-address"
-        />
-
-        <InputField
-          label="Username"
-          placeholder="Enter your username"
-          onChangeText={setUsername}
-          value={username}
-          keyboardType="default"
         />
 
         <InputField

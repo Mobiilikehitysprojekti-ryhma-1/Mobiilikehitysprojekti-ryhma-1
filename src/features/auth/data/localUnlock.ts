@@ -7,10 +7,10 @@ export async function ensureUnlockedOnLaunch(): Promise<boolean> {
   if (!hasHardware || !isEnrolled) return true;
 
   const result = await LocalAuthentication.authenticateAsync({
-    promptMessage: "Avaa sovellus",
-    fallbackLabel: "Käytä laitteen PIN-koodia",
-    cancelLabel: "Peruuta",
-    disableDeviceFallback: false, // sallii PINin
+    promptMessage: "Open app",
+    fallbackLabel: "Use PIN code",
+    cancelLabel: "Cancel",
+    disableDeviceFallback: false
   });
 
   return Boolean(result.success);
