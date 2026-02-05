@@ -4,6 +4,14 @@ import { db } from "../../../shared/firebase/firebaseClient";
 export type MealStatus = "ok" | "not ok" | "pending";
 export type MedStatus = "ok" | "not ok" | "pending";
 
+export type BPReading = {
+	sys: number | null;
+	dia: number | null;
+	pulse: number | null;
+};
+
+export type BPStatus = "ok" | "not ok" | "pending";
+
 export type DailyStatusPayload = {
 	date: string; // "2026-01-24" format
 	meals: {
@@ -21,6 +29,16 @@ export type DailyStatusPayload = {
 	location: {
 		stayedInArea: boolean;
 		breaches?: number;
+	};
+	bloodPressure?: {
+		morning: {
+			reading: BPReading;
+			status: BPStatus;
+		};
+		evening: {
+			reading: BPReading;
+			status: BPStatus;
+		};
 	};
 };
 

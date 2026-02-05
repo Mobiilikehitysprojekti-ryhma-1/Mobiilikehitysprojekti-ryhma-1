@@ -1,6 +1,7 @@
 {
   "projects": {
-    "mobiili": "mobiiliprojekti-4f839"
+    "mobiili": "mobiiliprojekti-4f839",
+    "default": "mobiiliprojekti-4f839"
   },
   "targets": {},
   "etags": {}
