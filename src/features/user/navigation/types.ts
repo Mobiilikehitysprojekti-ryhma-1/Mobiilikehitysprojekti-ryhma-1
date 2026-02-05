@@ -1,3 +1,8 @@
+export type UserHomeStackParamList = {
+  UserHome: undefined;
+  Settings: undefined;
+};
+
 export type UserStackParamList = {
   Home: undefined;
   Measurements: undefined;
