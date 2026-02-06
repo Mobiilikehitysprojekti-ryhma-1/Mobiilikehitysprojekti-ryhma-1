@@ -8,4 +8,5 @@ export type AdminStackParamList = {
   MealSchedule: undefined;
   MedSchedule: undefined;
   LocationSettings: undefined;
+  MeasurementsHistory: undefined;
 };

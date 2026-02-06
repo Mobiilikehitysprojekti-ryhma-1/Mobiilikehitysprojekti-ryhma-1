@@ -117,7 +117,7 @@ export default function MeasurementsScreen({}: Props) {
       <View style={styles.buttons}>
         <View style={styles.buttonRow}>
           <Button
-            title={takingPhoto === "morning" ? "Luetaan..." : "Aamu: ota kuva & lue"}
+            title={takingPhoto === "morning" ? "Luetaan..." : "Aamu: ota kuva mittarista"}
             onPress={() => takeAndSave("morning")}
             disabled={takingPhoto !== null}
           />
@@ -125,7 +125,7 @@ export default function MeasurementsScreen({}: Props) {
 
         <View style={styles.buttonRow}>
           <Button
-            title={takingPhoto === "evening" ? "Luetaan..." : "Ilta: ota kuva & lue"}
+            title={takingPhoto === "evening" ? "Luetaan..." : "Ilta: ota kuva mittarista"}
             onPress={() => takeAndSave("evening")}
             disabled={takingPhoto !== null}
           />
