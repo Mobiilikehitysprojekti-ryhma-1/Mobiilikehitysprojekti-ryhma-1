@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, ScrollView } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { logout } from "../../auth/state/authActions";
@@ -10,6 +10,7 @@ import { useLocation } from "../state/locationStore";
 import { useAdminHome } from "../state/adminHomeStore";
 import { useDailyStatus } from "../state/dailyStatusStore";
 import { PrimaryButton } from "../../../shared/components/Button/PrimaryButton";
+import type { BPReading, BPStatus } from "../data/dailyStatusRepository";
 
 export function SettingsScreen() {
 	const theme = useTheme();
@@ -23,6 +24,106 @@ export function SettingsScreen() {
 	const meds = useMeds(user?.uid);
 	const location = useLocation(user?.uid);
 	const dailyStatus = useDailyStatus(user?.uid, 2); // Load last 2 days (today + yesterday)
+
+	const [isGeneratingBP, setIsGeneratingBP] = useState(false);
+	const [bpGenerationStatus, setBpGenerationStatus] = useState<string | null>(null);
+
+	// Helper function to generate realistic BP readings
+	const generateBPReading = (baseSys: number = 120, baseDia: number = 80, basePulse: number = 70): BPReading => {
+		// Add some variation: ±10 for sys, ±5 for dia, ±10 for pulse
+		const sys = baseSys + Math.floor(Math.random() * 21) - 10; // 110-130
+		const dia = baseDia + Math.floor(Math.random() * 11) - 5; // 75-85
+		const pulse = basePulse + Math.floor(Math.random() * 21) - 10; // 60-80
+		return { sys, dia, pulse };
+	};
+
+	// Generate blood pressure history test data for last 14 days
+	const generateBPHistoryTestData = async () => {
+		if (!user?.uid) {
+			setBpGenerationStatus("Virhe: Käyttäjää ei löydy");
+			return;
+		}
+
+		setIsGeneratingBP(true);
+		setBpGenerationStatus(null);
+
+		try {
+			const today = new Date();
+			let successCount = 0;
+			let errorCount = 0;
+
+			console.log("Generating BP history test data for 14 days...");
+
+			// Generate data for each of the last 14 days
+			for (let i = 0; i < 14; i++) {
+				const date = new Date(today);
+				date.setDate(date.getDate() - i);
+				const dateStr = date.toISOString().split("T")[0];
+
+				// Generate slightly different base values for variety
+				// Older days might have slightly higher values (simulating improvement over time)
+				const dayOffset = i;
+				const baseSys = 125 - Math.floor(dayOffset * 0.5); // Slightly decreasing trend
+				const baseDia = 82 - Math.floor(dayOffset * 0.3);
+				const basePulse = 72 - Math.floor(dayOffset * 0.2);
+
+				// Morning reading (typically slightly higher)
+				const morningReading = generateBPReading(baseSys + 2, baseDia + 1, basePulse);
+				const morningStatus: BPStatus = morningReading.sys !== null && morningReading.dia !== null ? "ok" : "pending";
+
+				// Evening reading (typically slightly lower)
+				const eveningReading = generateBPReading(baseSys - 2, baseDia - 1, basePulse - 2);
+				const eveningStatus: BPStatus = eveningReading.sys !== null && eveningReading.dia !== null ? "ok" : "pending";
+
+				try {
+					await dailyStatus.saveDailyStatus({
+						date: dateStr,
+						meals: {
+							breakfast: "ok",
+							lunch: "ok",
+							dinner: "ok",
+							supper: "ok",
+						},
+						meds: {
+							morning: "ok",
+							noon: "ok",
+							evening: "ok",
+							night: "ok",
+						},
+						location: {
+							stayedInArea: true,
+							breaches: 0,
+						},
+						bloodPressure: {
+							morning: {
+								reading: morningReading,
+								status: morningStatus,
+							},
+							evening: {
+								reading: eveningReading,
+								status: eveningStatus,
+							},
+						},
+					});
+					successCount++;
+					console.log(`✓ Generated BP data for ${dateStr}`);
+				} catch (err: any) {
+					errorCount++;
+					console.error(`✗ Error generating BP data for ${dateStr}:`, err.message || err);
+				}
+			}
+
+			const message = `Valmis! Luotu ${successCount}/14 päivää. ${errorCount > 0 ? `Virheitä: ${errorCount}` : ""}`;
+			setBpGenerationStatus(message);
+			console.log(message);
+		} catch (error: any) {
+			const errorMsg = `Virhe BP-historiaa luotaessa: ${error.message || error}`;
+			setBpGenerationStatus(errorMsg);
+			console.error(errorMsg);
+		} finally {
+			setIsGeneratingBP(false);
+		}
+	};
 
 	// Test function - uses state layer instead of direct repository calls
 	const runTest = async () => {
@@ -283,6 +384,24 @@ export function SettingsScreen() {
 			>
 				Testaa Firestore get/set testidatalla
 			</PrimaryButton>
+
+			<PrimaryButton
+				disabled={!user || isGeneratingBP}
+				buttonColor={theme.colors.secondary}
+				textColor={theme.colors.onSecondary}
+				onPress={generateBPHistoryTestData}
+			>
+				{isGeneratingBP ? "Luodaan BP-historiaa..." : "Luo BP-historia (14 päivää)"}
+			</PrimaryButton>
+
+			{bpGenerationStatus ? (
+				<Text
+					style={{ marginTop: 8, color: theme.colors.onPrimary }}
+					variant="bodyMedium"
+				>
+					{bpGenerationStatus}
+				</Text>
+			) : null}
 		</ScrollView>
 	);
 }
