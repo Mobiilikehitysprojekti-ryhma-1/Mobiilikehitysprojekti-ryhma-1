@@ -2,9 +2,9 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import type { UserStackParamList } from "../../features/user/navigation/types";
 import { UserHomeStack } from "../../features/user/navigation/UserHomeStack";
-import MeasurementsScreen from "../../features/user/measurements/screens/MeasurementsScreen";
-import SafetyScreen from "../../features/user/safety/screens/SafetyScreen";
-import TasksScreen from "../../features/user/tasks/screens/TasksScreen";
+import MeasurementsScreen from "../../features/user/screens/MeasurementsScreen";
+import SafetyScreen from "../../features/user/screens/SafetyScreen";
+import TasksScreen from "../../features/user/screens/TasksScreen";
 
 const Tab = createBottomTabNavigator<UserStackParamList>();
 

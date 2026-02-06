@@ -44,6 +44,15 @@ export function DailyStatusDisplay({ statuses, loading }: Props) {
 		].join(" ");
 	};
 
+	const renderBloodPressureStatus = (bloodPressure?: DailyStatusDoc["bloodPressure"]) => {
+		const morningStatus = bloodPressure?.morning?.status || "pending";
+		const eveningStatus = bloodPressure?.evening?.status || "pending";
+		return {
+			morning: renderStatusSymbol(morningStatus),
+			evening: renderStatusSymbol(eveningStatus),
+		};
+	};
+
 	if (loading) {
 		return (
 			<View style={styles.loadingContainer}>
@@ -85,6 +94,13 @@ export function DailyStatusDisplay({ statuses, loading }: Props) {
 							<Text variant="bodyMedium" style={styles.label}>Meds:</Text>
 							<Text variant="bodyMedium" style={styles.status}>
 								{renderMedsStatus(status.meds)}
+							</Text>
+						</View>
+
+						<View style={styles.statusRow}>
+							<Text variant="bodyMedium" style={styles.label}>Blood Pressure:</Text>
+							<Text variant="bodyMedium" style={styles.status}>
+								Aamu: {renderBloodPressureStatus(status.bloodPressure).morning} Ilta: {renderBloodPressureStatus(status.bloodPressure).evening}
 							</Text>
 						</View>
 
