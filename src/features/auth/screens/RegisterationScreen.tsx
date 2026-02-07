@@ -1,6 +1,6 @@
 import { View, Text, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useMemo, useState } from "react";
-import { useTheme, RadioButton } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
@@ -11,8 +11,6 @@ import { InputField } from "../../../shared/components/Fields/InputField";
 import type { AuthStackParamList } from "../../../app/navigation/auth/AuthNavigator";
 import { register } from "../state/authActions";
 
-type Role = "user" | "admin";
-
 export default function RegistrationScreen() {
   const theme = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
@@ -21,7 +19,6 @@ export default function RegistrationScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [role, setRole] = useState<Role>("user");
 
   const canSubmit = useMemo(() => {
     return (
@@ -41,57 +38,19 @@ export default function RegistrationScreen() {
         email: email.trim(),
         password,
         username: username.trim(),
-        role,
       });
     } finally {
       setSubmitting(false);
     }
   }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1, padding: 24, justifyContent: "space-between" }}>
         <View style={{ width: "100%", maxWidth: 400 }}>
-          <InputField
-            label="Email"
-            placeholder="hello@domain.com"
-            onChangeText={setEmail}
-            value={email}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-
-          <InputField
-            label="Username"
-            placeholder="Enter your username"
-            onChangeText={setUsername}
-            value={username}
-            keyboardType="default"
-          />
-
-          <InputField
-            label="Password"
-            placeholder="Enter your password"
-            keyboardType="default"
-            onChangeText={setPassword}
-            value={password}
-            secureTextEntry
-          />
-
-          <RadioButton.Group
-            onValueChange={(value) => setRole(value as Role)}
-            value={role}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <RadioButton value="user" />
-              <Text>Care recipient</Text>
-            </View>
-
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <RadioButton value="admin" />
-              <Text>Caregiver</Text>
-            </View>
-          </RadioButton.Group>
+          <InputField label="Email" placeholder="hello@domain.com" onChangeText={setEmail} value={email} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} />
+          <InputField label="Username" placeholder="Enter your username" onChangeText={setUsername} value={username} keyboardType="default" />
+          <InputField label="Password" placeholder="Enter your password" keyboardType="default" onChangeText={setPassword} value={password} secureTextEntry />
 
           <View style={{ height: 32 }} />
 

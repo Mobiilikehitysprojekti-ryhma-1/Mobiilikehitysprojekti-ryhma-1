@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, se
 import { auth } from "../../../shared/firebase/firebaseClient";
 import { createUserProfile } from "../../../shared/firebase/profileRepository";
 import { clearLocalUnlock } from "../data/localUnlock";
+import { clearDeviceMode } from "../data/deviceMode";
 
 const loginSchema = z.object({
     email: z.string().email(),
@@ -13,7 +14,6 @@ const registerSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6),
     username: z.string().min(1),
-    role: z.enum(["user", "admin"]),
 });
 
 const resetSchema = z.object({
@@ -36,14 +36,13 @@ export async function login(input: unknown) {
 //Register with Firebase
 export async function register(input: unknown) {
     try {
-        const { email, password, username, role } = registerSchema.parse(input);
+        const { email, password, username } = registerSchema.parse(input);
 
         const res = await createUserWithEmailAndPassword(auth, email, password);
 
         await createUserProfile(res.user.uid, {
             email,
             username,
-            role,
         });
 
         return true;
@@ -58,7 +57,9 @@ export async function register(input: unknown) {
 export async function logout() {
     await signOut(auth);
     await clearLocalUnlock();
+    await clearDeviceMode();
 }
+
 
 export async function resetPassword(input: unknown) {
     try {

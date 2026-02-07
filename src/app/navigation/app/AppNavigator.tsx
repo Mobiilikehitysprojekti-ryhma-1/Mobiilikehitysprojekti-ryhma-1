@@ -3,8 +3,10 @@ import AdminStack from "../AdminStack";
 import UserStack from "../UserStack";
 
 export default function AppNavigator() {
-  const { user } = useAuthSession();
+  const { user, deviceMode } = useAuthSession();
   if (!user) return null;
 
-  return user.role === "admin" ? <AdminStack /> : <UserStack />;
+  if (!deviceMode) return null;
+
+  return deviceMode === "caregiver" ? <AdminStack /> : <UserStack />;
 }

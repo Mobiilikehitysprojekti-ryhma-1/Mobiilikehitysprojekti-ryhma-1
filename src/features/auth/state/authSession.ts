@@ -3,21 +3,23 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../../shared/firebase/firebaseClient";
 import { ensureUnlockedOnLaunch, clearLocalUnlock } from "../data/localUnlock";
 import { fetchUserProfile, createUserProfile } from "../../../shared/firebase/profileRepository";
-
-
-type Role = "admin" | "user";
+import { getDeviceMode, setDeviceMode as persistDeviceMode } from "../data/deviceMode";
+import type { DeviceMode } from "../data/deviceMode";
 
 //Authentication logic is handled here with Firebase and React
 type AuthState = {
-  user: { uid: string, role: Role } | null;
+  user: { uid: string } | null;
   unlocked: boolean;
+  deviceMode: DeviceMode | null;
 };
 
 //Global auth state
 let state: AuthState = {
   user: null,
-  unlocked: false
+  unlocked: false,
+  deviceMode: null,
 };
+
 const listeners = new Set<() => void>();
 
 function setState(partial: Partial<AuthState>) {
@@ -41,27 +43,24 @@ export function useAuthSession() {
 export function initAuthListener(onReady: () => void) {
   let readyCalled = false;
 
-  const unsub = onAuthStateChanged(auth, async (fbUser) => { //fb = firebase user
+  const unsub = onAuthStateChanged(auth, async (fbUser) => {
     try {
       if (!fbUser) {
         await clearLocalUnlock();
-        setState({ user: null, unlocked: false });
+        setState({ user: null, unlocked: false, deviceMode: null });
       } else {
         const unlocked = await ensureUnlockedOnLaunch();
+        const deviceMode = await getDeviceMode();
         const profile = await fetchUserProfile(fbUser.uid);
 
-        //Handle roles
         if (!profile) {
           await createUserProfile(fbUser.uid, {
             email: fbUser.email ?? "",
             username: "",
-            role: "user",
           });
-          setState({ user: { uid: fbUser.uid, role: "user" }, unlocked });
-        } else {
-          const role: Role = profile.role === "admin" ? "admin" : "user";
-          setState({ user: { uid: fbUser.uid, role }, unlocked });
         }
+
+        setState({ user: { uid: fbUser.uid }, unlocked, deviceMode });
       }
     } finally {
       if (!readyCalled) {
@@ -82,4 +81,9 @@ export async function requestUnlock(): Promise<boolean> {
 
 export function lockApp() {
   setState({ unlocked: false });
+}
+
+export async function chooseDeviceMode(mode: DeviceMode): Promise<void> {
+  await persistDeviceMode(mode);
+  setState({ deviceMode: mode });
 }
