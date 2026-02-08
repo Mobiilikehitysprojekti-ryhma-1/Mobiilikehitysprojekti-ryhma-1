@@ -1,7 +1,6 @@
 import React from 'react';
 import { ImageBackground, StyleSheet, View, TouchableWithoutFeedback, Keyboard, ViewStyle } from 'react-native';
 import { useAppTheme } from "../../shared/theme/theme";
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ScreenWrapperProps {
     children: React.ReactNode;
