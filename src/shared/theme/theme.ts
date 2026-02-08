@@ -38,6 +38,18 @@ export const Theme = {
       fontWeight: "600" as const,
     },
 
+    titleMedium: {
+      ...MD3LightTheme.fonts.titleLarge,
+      fontSize: 20,
+      fontWeight: "400" as const,
+    },
+
+    titleSmall: {
+      ...MD3LightTheme.fonts.titleLarge,
+      fontSize: 18,
+      fontWeight: "200" as const,
+    },
+    
     bodySmall: {
       ...MD3LightTheme.fonts.bodyLarge,
       fontSize: 8,
@@ -48,7 +60,7 @@ export const Theme = {
       fontSize: 16,
       lineHeight: 24,
     },
-    
+
     bodyMedium: {
       ...MD3LightTheme.fonts.bodyMedium,
       fontSize: 14,
@@ -62,6 +74,19 @@ export const Theme = {
     medium: 16,
     large: 24,
     extraLarge: 32,
+  },
+  width: {
+    small: "25%",
+    half: "50%",
+    large: "80%",
+    full: "100%",
+  },
+
+  height: {
+    small: "25%",
+    half: "50%",
+    large: "80%",
+    full: "100%",
   },
 } as const;
 
