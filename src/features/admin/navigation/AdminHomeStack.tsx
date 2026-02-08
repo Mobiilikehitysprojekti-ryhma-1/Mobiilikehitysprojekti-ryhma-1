@@ -17,7 +17,8 @@ function SettingsButton() {
 	return (
 		<IconButton
 			icon="cog"
-			iconColor={theme.colors.onPrimary}
+			iconColor={theme.colors.primary}
+			containerColor={theme.colors.onPrimary}
 			size={24}
 			onPress={() => navigation.navigate("Settings")}
 		/>
@@ -30,8 +31,10 @@ export function AdminHomeStack() {
 	return (
 		<Stack.Navigator
 			screenOptions={{
+				headerTransparent: true,
+				headerShadowVisible: false,
 				headerStyle: {
-					backgroundColor: theme.colors.primaryContainer,
+				backgroundColor: 'transparent',
 				},
 				headerTintColor: theme.colors.onPrimary,
 			}}
@@ -40,7 +43,7 @@ export function AdminHomeStack() {
 				name="AdminHomeMain"
 				component={AdminHomeScreen}
 				options={{
-					title: "Admin home",
+					title: "",
 					headerRight: () => <SettingsButton />,
 				}}
 			/>
@@ -48,7 +51,8 @@ export function AdminHomeStack() {
 				name="Settings"
 				component={SettingsScreen}
 				options={{
-					title: "Asetukset",
+					title: "Settings",
+					
 				}}
 			/>
 		</Stack.Navigator>

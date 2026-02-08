@@ -7,87 +7,59 @@ import { useAuth } from "../../../shared/hooks/useAuth";
 import { useAppMode } from "../../../shared/context/appModeContext";
 import { useDailyStatus } from "../state/dailyStatusStore";
 import { DailyStatusDisplay } from "../components/DailyStatusDisplay";
+import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
+import { HeaderText } from "../../../shared/components/Texts/HeaderText";
+import { BodyText } from "../../../shared/components/Texts/BodyText";
+import { useAppTheme } from "../../../shared/theme/theme";
 
 type Props = NativeStackScreenProps<AdminHomeStackParamList, "AdminHomeMain">;
 
-export function AdminHomeScreen({}: Props) {
-	const theme = useTheme();
-	const { user } = useAuth();
-	const { mode } = useAppMode();
-	const oletustilaLabel = mode === "admin" ? "Admin" : "Käyttäjä";
+export function AdminHomeScreen({ }: Props) {
+  const theme = useTheme();
+  const { spacing, width, height } = useAppTheme();
+  const { user } = useAuth();
+  const { mode } = useAppMode();
+  const oletustilaLabel = mode === "admin" ? "Admin" : "Käyttäjä";
 
-	// State layer - handles all business logic and data access
-	const dailyStatus = useDailyStatus(user?.uid, 2); // Load last 2 days (today + yesterday)
+  // State layer - handles all business logic and data access
+  const dailyStatus = useDailyStatus(user?.uid, 2); // Load last 2 days (today + yesterday)
 
   if (!user) {
     return (
-      <View
-        style={{
-          flex: 1,
-          padding: 16,
-          gap: 12,
-          backgroundColor: theme.colors.primaryContainer,
-        }}
-      >
-        <Text style={{ color: theme.colors.onPrimary }} variant="bodyMedium">
+      <View style={{ flex: 1, justifyContent: "center", padding: spacing.large, }}>
+        <BodyText>
           No user found
-        </Text>
+        </BodyText>
       </View>
     );
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingTop: 24,
-        padding: 16,
-        gap: 12,
-        backgroundColor: theme.colors.primaryContainer,
-      }}
-    >
-      <Text
-        style={{ color: theme.colors.onPrimary }}
-        variant="bodyMedium"
-      >
-        ADMIN home screen
-      </Text>
-      <Text
-        style={{
-          fontWeight: "bold",
-          color: theme.colors.onPrimary,
-          opacity: 0.9,
-        }}
-        variant="bodySmall"
-      >
-        User ID: {user.uid}
-      </Text>
-      <Text
-        style={{ color: theme.colors.onPrimary, opacity: 0.9 }}
-        variant="bodySmall"
-      >
-        Nykyinen oletustila: {oletustilaLabel}
-      </Text>
+    <ScreenWrapper>
+      <View style={{ flex: 1, top: spacing.extraLarge, padding: spacing.large, marginTop: spacing.extraLarge }}>
+        <BodyText>
+          User ID: {user.uid}
+        </BodyText>
 
-      {/* Daily Status Display */}
-      <Text
-        style={{ marginTop: 16, marginBottom: 8, color: theme.colors.onPrimary }}
-        variant="titleMedium"
-      >
-        Daily Status
-      </Text>
-      {dailyStatus.error && (
-        <Text
-          style={{ color: theme.colors.error, marginBottom: 8 }}
-          variant="bodySmall"
-        >
-          Error: {dailyStatus.error}
-        </Text>
-      )}
-      <DailyStatusDisplay
-        statuses={dailyStatus.statuses}
-        loading={dailyStatus.loading}
-      />
-    </View>
+        <BodyText>
+          Nykyinen oletustila: {oletustilaLabel}
+        </BodyText>
+
+        {/* Daily Status Display */}
+        <HeaderText marginTop="large" marginBottom="small">
+          Daily Status
+        </HeaderText>
+
+        {dailyStatus.error && (
+          <BodyText marginBottom="small" style={{ color: theme.colors.error }}>
+            Error: {dailyStatus.error}
+          </BodyText>
+        )}
+        <DailyStatusDisplay
+          statuses={dailyStatus.statuses}
+          loading={dailyStatus.loading}
+        />
+      </View>
+    </ScreenWrapper>
   );
 }

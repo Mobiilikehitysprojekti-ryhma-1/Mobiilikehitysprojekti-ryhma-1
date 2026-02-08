@@ -7,17 +7,53 @@ import { MealScheduleScreen } from "../../features/admin/screens/MealScheduleScr
 import { MedScheduleScreen } from "../../features/admin/screens/MedScheduleScreen";
 import { LocationSettingsScreen } from "../../features/admin/screens/LocationSettingsScreen";
 import { MeasurementsHistoryScreen } from "../../features/admin/screens/MeasurementsHistoryScreen";
+import { Icon } from "react-native-paper";
 
 const Tab = createBottomTabNavigator<AdminStackParamList>();
 
 export function AdminStack() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="AdminHome" component={AdminHomeStack} options={{ title: "Admin home", headerShown: false }} />
-      <Tab.Screen name="MealSchedule" component={MealScheduleScreen} options={{ title: "Meal Schedule" }} />
-      <Tab.Screen name="MedSchedule" component={MedScheduleScreen} options={{ title: "Med Schedule" }} />
-      <Tab.Screen name="LocationSettings" component={LocationSettingsScreen} options={{ title: "Location Settings" }} />
-      <Tab.Screen name="MeasurementsHistory" component={MeasurementsHistoryScreen} options={{ title: "Measurements History" }} />
+      <Tab.Screen name="AdminHome" component={AdminHomeStack}
+        options={{
+          title: "Home",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Icon source="home" color={color} size={size} />
+          ),
+        }} />
+      <Tab.Screen name="MealSchedule" component={MealScheduleScreen}
+        options={{
+          title: "Meal Schedule",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Icon source="food-apple" color={color} size={size} />
+          ),
+        }} />
+      <Tab.Screen name="MedSchedule" component={MedScheduleScreen}
+        options={{
+          title: "Med Schedule",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Icon source="medication" color={color} size={size} />
+          ),
+        }} />
+      <Tab.Screen name="LocationSettings" component={LocationSettingsScreen}
+        options={{
+          title: "Med Schedule",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Icon source="map-marker" color={color} size={size} />
+          ),
+        }} />
+      <Tab.Screen name="MeasurementsHistory" component={MeasurementsHistoryScreen}
+        options={{
+          title: "Measurements",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Icon source="history" color={color} size={size} />
+          ),
+        }} />
     </Tab.Navigator>
   );
 }
