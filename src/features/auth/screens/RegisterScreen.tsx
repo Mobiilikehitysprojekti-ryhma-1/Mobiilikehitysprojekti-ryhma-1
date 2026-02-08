@@ -11,6 +11,7 @@ import { BodyText } from '../../../shared/components/Texts/BodyText'
 import { HeaderText } from "../../../shared/components/Texts/HeaderText";
 import { useAppTheme } from "../../../shared/theme/theme";
 import { FlatInputField } from "../../../shared/components/Fields/FlatInputField";
+import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
 
 export default function RegisterScreen() {
     const theme = useTheme();
@@ -24,13 +25,12 @@ export default function RegisterScreen() {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScreenWrapper>
             <View
                 style={{
                     flex: 1,
                     padding: 24,
                     justifyContent: "space-between",
-                    backgroundColor: theme.colors.primaryContainer,
                 }}>
                 <View style={{ width: width.full, margin: "auto" }}>
                     <HeaderText>Registration</HeaderText>
@@ -78,6 +78,6 @@ export default function RegisterScreen() {
                     </View>
                 </View>
             </View>
-        </TouchableWithoutFeedback>
+        </ScreenWrapper>
     );
 }
