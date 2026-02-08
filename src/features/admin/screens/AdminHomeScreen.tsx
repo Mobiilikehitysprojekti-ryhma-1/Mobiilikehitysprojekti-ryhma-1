@@ -37,13 +37,6 @@ export function AdminHomeScreen({ }: Props) {
   return (
     <ScreenWrapper>
       <View style={{ flex: 1, top: spacing.extraLarge, padding: spacing.large, marginTop: spacing.extraLarge }}>
-        <BodyText>
-          User ID: {user.uid}
-        </BodyText>
-
-        <BodyText>
-          Nykyinen oletustila: {oletustilaLabel}
-        </BodyText>
 
         {/* Daily Status Display */}
         <HeaderText marginTop="large" marginBottom="small">
