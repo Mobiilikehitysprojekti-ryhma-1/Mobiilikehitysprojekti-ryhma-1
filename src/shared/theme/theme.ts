@@ -63,6 +63,20 @@ export const Theme = {
     large: 24,
     extraLarge: 32,
   },
+
+  width: {
+    small: "25%",
+    half: "50%",
+    large: "80%",
+    full: "100%",
+  },
+
+  height: {
+    small: "25%",
+    half: "50%",
+    large: "80%",
+    full: "100%",
+  },
 } as const;
 
 export const useAppTheme = () => usePaperTheme<typeof Theme>();
