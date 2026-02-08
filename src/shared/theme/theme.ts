@@ -48,7 +48,7 @@ export const Theme = {
       fontSize: 16,
       lineHeight: 24,
     },
-    
+
     bodyMedium: {
       ...MD3LightTheme.fonts.bodyMedium,
       fontSize: 14,
@@ -62,6 +62,20 @@ export const Theme = {
     medium: 16,
     large: 24,
     extraLarge: 32,
+  },
+
+  width: {
+    small: "25%",
+    half: "50%",
+    large: "80%",
+    full: "100%",
+  },
+
+  height: {
+    small: "25%",
+    half: "50%",
+    large: "80%",
+    full: "100%",
   },
 } as const;
 
