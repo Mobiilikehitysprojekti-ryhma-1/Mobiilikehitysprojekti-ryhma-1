@@ -33,7 +33,7 @@ export default function ModePickerScreen({ onChosen }: Props) {
         <PrimaryButton
           buttonColor={theme.colors.secondary}
           style={{ margin: spacing.medium }}
-          onPress={() => choose("admin")}> User
+          onPress={() => choose("user")}> User
         </PrimaryButton>
         <PrimaryButton
           buttonColor={theme.colors.secondary}
