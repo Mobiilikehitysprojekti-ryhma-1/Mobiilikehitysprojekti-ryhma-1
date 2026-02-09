@@ -26,15 +26,10 @@ export default function RegisterScreen() {
 
     return (
         <ScreenWrapper>
-            <View
-                style={{
-                    flex: 1,
-                    padding: 24,
-                    justifyContent: "space-between",
-                }}>
-                <View style={{ width: width.full, margin: "auto" }}>
+            <View style={{ flex: 1, justifyContent: "center", padding: spacing.large, }}>
+                <View style={{width: width.full, padding: spacing.small,  margin: "auto" }}>
                     <HeaderText>Registration</HeaderText>
-                    <BodyText marginBottom="large">Please fill out your user info below to register.</BodyText>
+                    <BodyText marginBottom="medium">Please fill out your user info below to register.</BodyText>
                     <FlatInputField
                         label="Email address"
                         placeholder="hello@domain.com"
@@ -63,13 +58,13 @@ export default function RegisterScreen() {
                     </PrimaryButton>
                 </View>
 
-                <View
-                    style={{
-                        width: width.full,
-                        alignItems: "center",
-                        marginBottom: spacing.medium,
-                    }}
-                >
+           <View
+                style={{
+                    width: width.full,
+                    alignSelf: "center",
+                    marginBottom: spacing.extraLarge,
+                    padding: spacing.large
+                }}>
                     <View style={{ width: width.full, bottom: spacing.extraLarge }}>
                         <SecondaryButton
                             onPress={() => nav.navigate("Login")}>
