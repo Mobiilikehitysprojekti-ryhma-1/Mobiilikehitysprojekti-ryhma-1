@@ -19,7 +19,7 @@ export const ScreenWrapper = ({ children, style }: ScreenWrapperProps) => {
                     <View //Comes to every screen when using <ScreenWrapper>, think as "universal view"
                         style={[{
                             flex: 1,
-                            padding: spacing.small,
+                            padding: spacing.large,
                             backgroundColor: 'rgba(70, 130, 180, 0.4)', // fallback
                         },
                             style //Allows passing stuff from single screens for specific style options.
