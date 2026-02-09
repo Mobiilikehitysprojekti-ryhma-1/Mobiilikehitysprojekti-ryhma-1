@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { PaperProvider } from "react-native-paper";
 import RootNavigator from "./navigation/RootNavigator";
 import { initAuthListener } from "../features/auth/state/authSession";
-import { Theme } from "../shared/theme/colors";
+import { Theme } from "../shared/theme/theme";
 
 export default function AppShell() {
     const [booting, setBooting] = useState(true);
