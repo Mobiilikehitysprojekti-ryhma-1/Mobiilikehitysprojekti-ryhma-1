@@ -43,6 +43,7 @@ export function AdminHomeStack() {
 				name="AdminHomeMain"
 				component={AdminHomeScreen}
 				options={{
+					animation: "none",
 					title: "",
 					headerRight: () => <SettingsButton />,
 				}}
