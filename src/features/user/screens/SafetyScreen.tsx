@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Switch, View } from "react-native";
+import { Alert, Switch, View } from "react-native";
 import { Appbar, Text } from "react-native-paper";
 
 import { useAuth } from "../../../shared/hooks/useAuth";
@@ -43,6 +43,13 @@ export default function SafetyScreen() {
       500
     );
   }, [userPosition?.latitude, userPosition?.longitude]);
+
+  // Show alert when tracking is on and user is outside safe zone
+  useEffect(() => {
+    if (isTrackingEnabled && inside === false) {
+      Alert.alert("Lähetä omaiselle ilmoitus sähköpostilla tai notifikaatiolla", "Käyttäjä on ulkona turvallisuus alueelta.");
+    }
+  }, [isTrackingEnabled, inside]);
 
   return (
     <View style={{ flex: 1 }}>
