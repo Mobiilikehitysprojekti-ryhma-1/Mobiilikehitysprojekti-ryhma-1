@@ -7,9 +7,14 @@ import type { AuthStackParamList } from "../../../app/navigation/auth/AuthNaviga
 import { login } from "../state/authActions";
 import { PrimaryButton } from "../../../shared/components/Button/PrimaryButton";
 import { FlatInputField } from "../../../shared/components/Fields/FlatInputField";
+import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
+import { HeaderText } from "../../../shared/components/Texts/HeaderText";
+import { useAppTheme } from "../../../shared/theme/theme";
+import { SecondaryButton } from "../../../shared/components/Button/SecondaryButton";
 
 export default function LoginScreen() {
     const theme = useTheme();
+    const { spacing, width, height } = useAppTheme();
     const nav = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -19,72 +24,53 @@ export default function LoginScreen() {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View
-                style={{
-                    flex: 1,
-                    paddingTop: 24,
-                    backgroundColor: theme.colors.primaryContainer,
-                    justifyContent: "space-between",
-                }}
-            >
-                <View style={{ width: "100%", maxWidth: 500, alignSelf: "center" }}>
-                    <View style={{ width: "100%", padding: 10, marginTop: 80 }}>
-                        <Text
-                            style={{
-                                fontSize: 24,
-                                marginBottom: 24,
-                                alignSelf: "center",
-                                color: theme.colors.onPrimary,
-                            }}
-                        >
-                            Kirjaudu
-                        </Text>
-                        <FlatInputField
-                            label="Sähköposti"
-                            placeholder="Sähköposti"
-                            value={email}
-                            onChangeText={setEmail}
-                            autoCapitalize="none"
-                            keyboardType="email-address"
-                        />
-                        <View style={{ height: 16 }} />
-                        <FlatInputField
-                            label="Salasana"
-                            placeholder="Salasana"
-                            value={password}
-                            onChangeText={setPassword}
-                            secureTextEntry
-                            keyboardType="default"
-                        />
-                        <View style={{ height: 32 }} />
-                        <PrimaryButton
-                            disabled={!checkLoginInputs()}
-                            buttonColor={theme.colors.secondary}
-                            textColor={theme.colors.onSecondary}
-                            onPress={() => login({ email, password })}
-                        >
-                            Kirjaudu
-                        </PrimaryButton>
-                    </View>
-                </View>
-
-                <View
-                    style={{
-                        width: "100%",
-                        maxWidth: 400,
-                        alignSelf: "center",
-                        marginBottom: 54,
-                    }}
-                >
+        <ScreenWrapper>
+            <View style={{ flex: 1, justifyContent: "center", padding: spacing.large, }}>
+                <View style={{ width: width.full, padding: spacing.small, marginTop: spacing.extraLarge }}>
+                    <HeaderText centered marginBottom="extraLarge">
+                        Login
+                    </HeaderText>
+                    <FlatInputField
+                        label="Email address"
+                        placeholder="hello@domain.com"
+                        value={email}
+                        onChangeText={setEmail}
+                        autoCapitalize="none"
+                        keyboardType="email-address"
+                    />
+                    <View style={{ height: spacing.medium }} />
+                    <FlatInputField
+                        label="Password"
+                        placeholder="Password"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry
+                        keyboardType="default"
+                    />
+                    <View style={{ height: spacing.extraLarge }} />
                     <PrimaryButton
-                        mode="outlined"
-                        onPress={() => nav.navigate("Register")}
+                        disabled={!checkLoginInputs()}
+                        buttonColor={theme.colors.secondary}
+                        textColor={theme.colors.onSecondary}
+                        onPress={() => login({ email, password })}
                     >
-                        Luo tili
+                        Sign in
                     </PrimaryButton>
                 </View>
             </View>
-        </TouchableWithoutFeedback>
+
+            <View
+                style={{
+                    width: width.full,
+                    alignSelf: "center",
+                    marginBottom: spacing.extraLarge,
+                    padding: spacing.large
+                }}>
+                <SecondaryButton
+                    onPress={() => nav.navigate("Register")}>
+                    Create account
+                </SecondaryButton>
+            </View>
+        </ScreenWrapper>
     );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -7,10 +7,15 @@ import type { AuthStackParamList } from "../../../app/navigation/auth/AuthNaviga
 import { register } from "../state/authActions";
 import { PrimaryButton } from "../../../shared/components/Button/PrimaryButton";
 import { SecondaryButton } from "../../../shared/components/Button/SecondaryButton";
-import { InputField } from "../../../shared/components/Fields/InputField";
+import { BodyText } from '../../../shared/components/Texts/BodyText'
+import { HeaderText } from "../../../shared/components/Texts/HeaderText";
+import { useAppTheme } from "../../../shared/theme/theme";
+import { FlatInputField } from "../../../shared/components/Fields/FlatInputField";
+import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
 
 export default function RegisterScreen() {
     const theme = useTheme();
+    const { spacing, width, height } = useAppTheme();
     const nav = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -20,80 +25,54 @@ export default function RegisterScreen() {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View
-                style={{
-                    flex: 1,
-                    padding: 24,
-                    justifyContent: "space-between",
-                    backgroundColor: theme.colors.primaryContainer,
-                }}
-            >
-                <View style={{ width: "100%", maxWidth: 400 }}>
-                    <Text
-                        style={{
-                            fontSize: 24,
-                            marginBottom: 18,
-                            alignSelf: "center",
-                            color: theme.colors.onPrimary,
-                        }}
-                    >
-                        Rekisteröidy
-                    </Text>
-                    <InputField
-                        label="Sähköposti"
+        <ScreenWrapper>
+            <View style={{ flex: 1, justifyContent: "center", padding: spacing.large, }}>
+                <View style={{width: width.full, padding: spacing.small,  margin: "auto" }}>
+                    <HeaderText>Registration</HeaderText>
+                    <BodyText marginBottom="medium">Please fill out your user info below to register.</BodyText>
+                    <FlatInputField
+                        label="Email address"
                         placeholder="hello@domain.com"
                         value={email}
                         onChangeText={setEmail}
                         autoCapitalize="none"
                         keyboardType="email-address"
+                        style={{ marginBottom: spacing.medium, marginTop: spacing.small }}
                     />
-                    <InputField
-                        label="Salasana"
-                        placeholder="Salasana"
+                    <FlatInputField
+                        label="Password"
+                        placeholder="Password"
                         value={password}
                         onChangeText={setPassword}
                         secureTextEntry
                         keyboardType="default"
                     />
-                    <View style={{ height: 32 }} />
+                    <View style={{ margin: spacing.small }} />
                     <PrimaryButton
                         disabled={!checkRegistrationInputs()}
                         buttonColor={theme.colors.secondary}
                         textColor={theme.colors.onSecondary}
                         onPress={() => register({ email, password })}
                     >
-                        Luo tili
+                        Create account
                     </PrimaryButton>
                 </View>
 
-                <View
-                    style={{
-                        width: "100%",
-                        maxWidth: 400,
-                        alignItems: "center",
-                        marginBottom: 66,
-                    }}
-                >
-                    <Text
-                        style={{
-                            fontSize: 16,
-                            marginBottom: 18,
-                            textAlign: "center",
-                            color: theme.colors.onPrimary,
-                        }}
-                    >
-                        Onko sinulla jo tili?
-                    </Text>
-                    <View style={{ width: "100%" }}>
+           <View
+                style={{
+                    width: width.full,
+                    alignSelf: "center",
+                    marginBottom: spacing.extraLarge,
+                    padding: spacing.large
+                }}>
+                    <View style={{ width: width.full, bottom: spacing.extraLarge }}>
                         <SecondaryButton
-                            onPress={() => nav.navigate("Login")}
-                        >
-                            Kirjaudu
+                            onPress={() => nav.navigate("Login")}>
+                            Already have an account?
                         </SecondaryButton>
                     </View>
                 </View>
             </View>
-        </TouchableWithoutFeedback>
+        </ScreenWrapper>
     );
 }

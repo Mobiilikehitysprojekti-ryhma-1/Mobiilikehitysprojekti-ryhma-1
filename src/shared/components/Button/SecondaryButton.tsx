@@ -5,7 +5,7 @@ export function SecondaryButton({
   buttonColor,
   style,
   children,
-  mode = "contained",
+  mode = "outlined",
   ...rest
 }: ButtonProps) {
   const theme = useTheme();
