@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import { useTheme, Text } from "react-native-paper";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useTheme } from "react-native-paper";
+import type { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { AdminHomeStackParamList } from "../navigation/types";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useAppMode } from "../../../shared/context/appModeContext";
@@ -11,11 +11,14 @@ import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
 import { HeaderText } from "../../../shared/components/Texts/HeaderText";
 import { BodyText } from "../../../shared/components/Texts/BodyText";
 import { useAppTheme } from "../../../shared/theme/theme";
+import { useNavigation } from "@react-navigation/native";
+import { SettingsButton } from "../../../shared/components/Button/SettingsButton";
 
 type Props = NativeStackScreenProps<AdminHomeStackParamList, "AdminHomeMain">;
 
 export function AdminHomeScreen({ }: Props) {
   const theme = useTheme();
+  const navigation = useNavigation<NativeStackNavigationProp<AdminHomeStackParamList>>();
   const { spacing, width, height } = useAppTheme();
   const { user } = useAuth();
   const { mode } = useAppMode();
@@ -36,6 +39,15 @@ export function AdminHomeScreen({ }: Props) {
 
   return (
     <ScreenWrapper>
+      <View style={{
+        position: 'absolute',
+        top: spacing.extraLarge + 30,
+        right: spacing.medium,
+        zIndex: 10
+      }}>
+        <SettingsButton />
+      </View>
+
       <View style={{ flex: 1, top: spacing.extraLarge, padding: spacing.large, marginTop: spacing.extraLarge }}>
 
         {/* Daily Status Display */}

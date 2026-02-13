@@ -1,7 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import type { AdminStackParamList } from "../../features/admin/navigation/types";
-
 import { AdminHomeStack } from "../../features/admin/navigation/AdminHomeStack";
 import { MealScheduleScreen } from "../../features/admin/screens/MealScheduleScreen";
 import { MedScheduleScreen } from "../../features/admin/screens/MedScheduleScreen";
@@ -40,7 +39,7 @@ export function AdminStack() {
         }} />
       <Tab.Screen name="LocationSettings" component={LocationSettingsScreen}
         options={{
-          title: "Med Schedule",
+          title: "Location",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Icon source="map-marker" color={color} size={size} />
