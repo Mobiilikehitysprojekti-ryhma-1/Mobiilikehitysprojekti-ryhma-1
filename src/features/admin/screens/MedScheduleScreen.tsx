@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { View, TextInput, StyleSheet } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { View } from "react-native";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { AdminStackParamList } from "../navigation/types";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useMeds } from "../state/medsStore";
 
+import { useTheme } from "react-native-paper";
+import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
+import { HeaderText } from "../../../shared/components/Texts/HeaderText";
+import { BodyText } from "../../../shared/components/Texts/BodyText";
+import { useAppTheme } from "../../../shared/theme/theme";
+import { FlatInputField } from "../../../shared/components/Fields/FlatInputField";
+import { SecondaryButton } from "../../../shared/components/Button/SecondaryButton";
+
 type Props = BottomTabScreenProps<AdminStackParamList, "MedSchedule">;
 
-export function MedScheduleScreen({}: Props) {
+export function MedScheduleScreen({ }: Props) {
+	const theme = useTheme();
+	const { spacing } = useAppTheme();
 	// kuka on kirjautunut
 	const { user } = useAuth();
 	// state layer - hallitsee lääkkeiden tila ja kutsut data layeriin
@@ -25,18 +34,18 @@ export function MedScheduleScreen({}: Props) {
 	if (!user) return null;
 	if (loading && !meds) {
 		return (
-			<View style={styles.container}>
-				<Text variant="bodyMedium">Loading...</Text>
+			<View>
+				<BodyText variant="bodyMedium">Loading...</BodyText>
 			</View>
 		);
 	}
 
 	if (!meds) {
 		return (
-			<View style={styles.container}>
-				<Text variant="bodyMedium" style={{ color: "red" }}>
+			<View>
+				<BodyText variant="bodyMedium" style={{ color: "red" }}>
 					{error || "Failed to load medications"}
-				</Text>
+				</BodyText>
 			</View>
 		);
 	}
@@ -50,88 +59,188 @@ export function MedScheduleScreen({}: Props) {
 			// Error is handled by the store
 		} finally {
 			setSaving(false);
+			console.log("Saved meds:", meds);
 		}
 	};
 
 	return (
-		<View style={styles.container}>
-			<Text variant="headlineSmall">Set medication times</Text>
-			
-			<View style={styles.inputGroup}>
-				<Text variant="bodyMedium">{meds.morning.label}</Text>
-				<TextInput
-					style={styles.input}
-					value={meds.morning.time}
-					onChangeText={(time) => updateMedTime("morning", time)}
-					placeholder="HH:MM"
-					keyboardType="numeric"
-				/>
-			</View>
+		<ScreenWrapper>
+			<View style={{ top: spacing.extraLarge, padding: spacing.large }}></View>
+			<HeaderText marginBottom="extraLarge">Set medication times</HeaderText>
 
-			<View style={styles.inputGroup}>
-				<Text variant="bodyMedium">{meds.noon.label}</Text>
-				<TextInput
-					style={styles.input}
-					value={meds.noon.time}
-					onChangeText={(time) => updateMedTime("noon", time)}
-					placeholder="HH:MM"
-					keyboardType="numeric"
-				/>
-			</View>
+			<BodyText variant="bodyMedium">{meds.morning.label}</BodyText>
+			<FlatInputField
+				value={meds.morning.time}
+				onChangeText={(text) => {
+					// Remove potential non-numeric chars
+					let cleaned = text.replace(/[^0-9]/g, "");
 
-			<View style={styles.inputGroup}>
-				<Text variant="bodyMedium">{meds.evening.label}</Text>
-				<TextInput
-					style={styles.input}
-					value={meds.evening.time}
-					onChangeText={(time) => updateMedTime("evening", time)}
-					placeholder="HH:MM"
-					keyboardType="numeric"
-				/>
-			</View>
+					//Limit to 4 digits
+					if (cleaned.length > 4) cleaned = cleaned.slice(0, 4);
 
-			<View style={styles.inputGroup}>
-				<Text variant="bodyMedium">{meds.night.label}</Text>
-				<TextInput
-					style={styles.input}
-					value={meds.night.time}
-					onChangeText={(time) => updateMedTime("night", time)}
-					placeholder="HH:MM"
-					keyboardType="numeric"
-				/>
-			</View>
+					//24-hour logic and formatting to e.g 08:00
+					let formattedTime = cleaned;
+					if (cleaned.length >= 1) {
+						//First digit cant be above 2
+						if (parseInt(cleaned[0]) > 2) formattedTime = "0";
+					}
+					if (cleaned.length >= 2) {
+						// hours cant be above 23
+						if (parseInt(cleaned.slice(0, 2)) > 23) {
+							formattedTime = cleaned.slice(0, 1);
+						} else {
+							formattedTime = cleaned.slice(0, 2) + (cleaned.length > 2 ? ":" : "");
+						}
+					}
+
+					if (cleaned.length >= 3) {
+						// minutes cant be above 5
+						if (parseInt(cleaned[2]) > 5) {
+							formattedTime = cleaned.slice(0, 2) + ":";
+						} else {
+							formattedTime = cleaned.slice(0, 2) + ":" + cleaned.slice(2);
+							formattedTime = formattedTime.slice(0, 5);
+						}
+					}
+
+					updateMedTime("morning", formattedTime);
+				}}
+
+				placeholder="HH:MM"
+				keyboardType="number-pad"
+				maxLength={5} //format is always 5 chars (e.g. 08:00)
+				style={{ marginBottom: spacing.medium }}
+			/>
+			{/* Repeat similar input logic for noon, evening, and night */}
+
+			<BodyText variant="bodyMedium">{meds.noon.label}</BodyText>
+			<FlatInputField
+				value={meds.noon.time}
+				onChangeText={(text) => {
+					let cleaned = text.replace(/[^0-9]/g, "");
+
+					if (cleaned.length > 4) cleaned = cleaned.slice(0, 4);
+
+					let formattedTime = cleaned;
+					if (cleaned.length >= 1) {
+						if (parseInt(cleaned[0]) > 2) formattedTime = "0";
+					}
+					if (cleaned.length >= 2) {
+						if (parseInt(cleaned.slice(0, 2)) > 23) {
+							formattedTime = cleaned.slice(0, 1);
+						} else {
+							formattedTime = cleaned.slice(0, 2) + (cleaned.length > 2 ? ":" : "");
+						}
+					}
+
+					if (cleaned.length >= 3) {
+						if (parseInt(cleaned[2]) > 5) {
+							formattedTime = cleaned.slice(0, 2) + ":";
+						} else {
+							formattedTime = cleaned.slice(0, 2) + ":" + cleaned.slice(2);
+							formattedTime = formattedTime.slice(0, 5);
+						}
+					}
+
+					updateMedTime("noon", formattedTime);
+				}}
+
+				placeholder="HH:MM"
+				keyboardType="number-pad"
+				maxLength={5}
+				style={{ marginBottom: spacing.medium }}
+			/>
+
+
+			<BodyText variant="bodyMedium">{meds.evening.label}</BodyText>
+			<FlatInputField
+				value={meds.evening.time}
+				onChangeText={(text) => {
+					let cleaned = text.replace(/[^0-9]/g, "");
+
+					if (cleaned.length > 4) cleaned = cleaned.slice(0, 4);
+
+					let formattedTime = cleaned;
+					if (cleaned.length >= 1) {
+						if (parseInt(cleaned[0]) > 2) formattedTime = "0";
+					}
+					if (cleaned.length >= 2) {
+						if (parseInt(cleaned.slice(0, 2)) > 23) {
+							formattedTime = cleaned.slice(0, 1);
+						} else {
+							formattedTime = cleaned.slice(0, 2) + (cleaned.length > 2 ? ":" : "");
+						}
+					}
+
+					if (cleaned.length >= 3) {
+						if (parseInt(cleaned[2]) > 5) {
+							formattedTime = cleaned.slice(0, 2) + ":";
+						} else {
+							formattedTime = cleaned.slice(0, 2) + ":" + cleaned.slice(2);
+							formattedTime = formattedTime.slice(0, 5);
+						}
+					}
+
+					updateMedTime("evening", formattedTime);
+				}}
+
+				placeholder="HH:MM"
+				keyboardType="number-pad"
+				maxLength={5}
+				style={{ marginBottom: spacing.medium }}
+			/>
+
+			<BodyText variant="bodyMedium">{meds.night.label}</BodyText>
+			<FlatInputField
+				value={meds.night.time}
+				onChangeText={(text) => {
+					let cleaned = text.replace(/[^0-9]/g, "");
+
+					if (cleaned.length > 4) cleaned = cleaned.slice(0, 4);
+
+					let formattedTime = cleaned;
+					if (cleaned.length >= 1) {
+						if (parseInt(cleaned[0]) > 2) formattedTime = "0";
+					}
+					if (cleaned.length >= 2) {
+						if (parseInt(cleaned.slice(0, 2)) > 23) {
+							formattedTime = cleaned.slice(0, 1);
+						} else {
+							formattedTime = cleaned.slice(0, 2) + (cleaned.length > 2 ? ":" : "");
+						}
+					}
+
+					if (cleaned.length >= 3) {
+						if (parseInt(cleaned[2]) > 5) {
+							formattedTime = cleaned.slice(0, 2) + ":";
+						} else {
+							formattedTime = cleaned.slice(0, 2) + ":" + cleaned.slice(2);
+							formattedTime = formattedTime.slice(0, 5);
+						}
+					}
+
+					updateMedTime("night", formattedTime);
+				}}
+
+				placeholder="HH:MM"
+				keyboardType="number-pad"
+				maxLength={5}
+				style={{ marginBottom: spacing.medium }}
+			/>
+
 
 			{error && (
-				<Text variant="bodyMedium" style={{ color: "red" }}>
+				<BodyText variant="bodyMedium" style={{ color: "red" }}>
 					{error}
-				</Text>
+				</BodyText>
 			)}
-			<Button 
-				mode="contained" 
+			<SecondaryButton
 				onPress={handleSave}
 				loading={saving || loading}
 				disabled={saving || loading}
-			>
+				style={{ marginTop: spacing.extraLarge }}>
 				Save
-			</Button>
-		</View>
+			</SecondaryButton>
+		</ScreenWrapper >
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		padding: 16,
-		gap: 12,
-	},
-	inputGroup: {
-		gap: 4,
-	},
-	input: {
-		borderWidth: 1,
-		borderColor: "#ccc",
-		borderRadius: 4,
-		padding: 12,
-		fontSize: 16,
-		backgroundColor: "#fff",
-	},
-});
