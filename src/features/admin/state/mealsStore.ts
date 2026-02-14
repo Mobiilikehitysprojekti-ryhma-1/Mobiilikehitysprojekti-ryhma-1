@@ -18,10 +18,10 @@ export function useMeals(uid: string | undefined) {
 			} else {
 				// Set default values if no meals exist
 				setMeals({
-					breakfast: { label: "Aamupala", time: "08:00" },
-					lunch: { label: "Lounas", time: "12:00" },
-					dinner: { label: "Päivällinen", time: "17:00" },
-					supper: { label: "Iltapala", time: "20:00" },
+					breakfast: { label: "Breakfast", time: "08:00" },
+					lunch: { label: "Lunch", time: "12:00" },
+					dinner: { label: "Dinner", time: "17:00" },
+					supper: { label: "Supper", time: "20:00" },
 				});
 			}
 		} catch (err: any) {
