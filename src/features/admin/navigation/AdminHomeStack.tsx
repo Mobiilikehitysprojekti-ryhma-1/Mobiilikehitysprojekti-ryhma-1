@@ -24,6 +24,7 @@ export function AdminHomeStack() {
 					headerShown: true,
 					title: "Settings",
 					headerTransparent: true,
+					headerTintColor: '#fff',
 				}}
 			/>
 		</Stack.Navigator>
