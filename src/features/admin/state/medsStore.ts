@@ -18,10 +18,10 @@ export function useMeds(uid: string | undefined) {
 			} else {
 				// Set default values if no meds exist
 				setMeds({
-					morning: { label: "Aamulääke", time: "08:30" },
-					noon: { label: "Päivälääke", time: "12:30" },
-					evening: { label: "Iltalääke", time: "18:30" },
-					night: { label: "Yölääke", time: "22:00" },
+					morning: { label: "Morning", time: "08:30" },
+					noon: { label: "Noon", time: "12:30" },
+					evening: { label: "Evening", time: "18:30" },
+					night: { label: "Night", time: "22:00" },
 				});
 			}
 		} catch (err: any) {
