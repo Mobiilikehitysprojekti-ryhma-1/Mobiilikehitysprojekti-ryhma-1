@@ -95,7 +95,7 @@ export function MeasurementsHistoryScreen({}: Props) {
 			<View style={{ top: spacing.extraLarge, padding: spacing.large, flex: 1 }}>
 				<ScrollView contentContainerStyle={{ paddingBottom: spacing.extraLarge }}>
 					<HeaderText marginBottom="small" style={{ color: theme.colors.onPrimary }}>
-						Bloodpressure history (14 last)
+						Bloodpressure history
 					</HeaderText>
 					<BodyText variant="bodyMedium" marginBottom="medium" color={theme.colors.onPrimary}>
 						Requested: {docs.length} days
