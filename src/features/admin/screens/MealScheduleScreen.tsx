@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { View, TextInput, StyleSheet } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { View } from "react-native";
+import { useTheme } from "react-native-paper";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { AdminStackParamList } from "../navigation/types";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useMeals } from "../state/mealsStore";
 import type { MealsItems } from "../data/mealsRepository";
 
+import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
+import { HeaderText } from "../../../shared/components/Texts/HeaderText";
+import { BodyText } from "../../../shared/components/Texts/BodyText";
+import { useAppTheme } from "../../../shared/theme/theme";
+import { FlatInputField } from "../../../shared/components/Fields/FlatInputField";
+import { SecondaryButton } from "../../../shared/components/Button/SecondaryButton";
+
 type Props = BottomTabScreenProps<AdminStackParamList, "MealSchedule">;
 
-export function MealScheduleScreen({}: Props) {
+export function MealScheduleScreen({ }: Props) {
+	const theme = useTheme();
+	const { spacing, width, height } = useAppTheme();
 	// kuka on kirjautunut
 	const { user } = useAuth();
 	// state layer - hallitsee aterioiden tila ja kutsut data layeriin
@@ -26,18 +35,18 @@ export function MealScheduleScreen({}: Props) {
 	if (!user) return null;
 	if (loading && !meals) {
 		return (
-			<View style={styles.container}>
-				<Text variant="bodyMedium">Loading...</Text>
+			<View>
+				<BodyText variant="bodyMedium">Loading...</BodyText>
 			</View>
 		);
 	}
 
 	if (!meals) {
 		return (
-			<View style={styles.container}>
-				<Text variant="bodyMedium" style={{ color: "red" }}>
+			<View >
+				<BodyText variant="bodyMedium" style={{ color: "red" }}>
 					{error || "Failed to load meals"}
-				</Text>
+				</BodyText>
 			</View>
 		);
 	}
@@ -52,87 +61,191 @@ export function MealScheduleScreen({}: Props) {
 		} finally {
 			setSaving(false);
 		}
+
 	};
 
 	return (
-		<View style={styles.container}>
-			<Text variant="headlineSmall">Set meal times</Text>
-			
-			<View style={styles.inputGroup}>
-				<Text variant="bodyMedium">{meals.breakfast.label}</Text>
-				<TextInput
-					style={styles.input}
+		<ScreenWrapper>
+			<View style={{ top: spacing.extraLarge, padding: spacing.large }}>
+
+				<HeaderText marginBottom="extraLarge">Set meal times</HeaderText>
+
+				<BodyText>{meals.breakfast.label}</BodyText>
+
+				<FlatInputField
 					value={meals.breakfast.time}
-					onChangeText={(time) => updateMealTime("breakfast", time)}
-					placeholder="HH:MM"
-					keyboardType="numeric"
-				/>
-			</View>
+					onChangeText={(text) => {
+						// Remove potential non-numeric chars
+						let cleaned = text.replace(/[^0-9]/g, "");
 
-			<View style={styles.inputGroup}>
-				<Text variant="bodyMedium">{meals.lunch.label}</Text>
-				<TextInput
-					style={styles.input}
+						//Limit to 4 digits
+						if (cleaned.length > 4) cleaned = cleaned.slice(0, 4);
+
+						//24-hour logic and formatting to e.g 08:00
+						let formattedTime = cleaned;
+						if (cleaned.length >= 1) {
+							//First digit cant be above 2
+							if (parseInt(cleaned[0]) > 2) formattedTime = "0";
+						}
+						if (cleaned.length >= 2) {
+							// hours cant be above 23
+							if (parseInt(cleaned.slice(0, 2)) > 23) {
+								formattedTime = cleaned.slice(0, 1);
+							} else {
+								formattedTime = cleaned.slice(0, 2) + (cleaned.length > 2 ? ":" : "");
+							}
+						}
+
+						if (cleaned.length >= 3) {
+							// minutes cant be above 5
+							if (parseInt(cleaned[2]) > 5) {
+								formattedTime = cleaned.slice(0, 2) + ":";
+							} else {
+								formattedTime = cleaned.slice(0, 2) + ":" + cleaned.slice(2);
+								formattedTime = formattedTime.slice(0, 5);
+							}
+						}
+
+						updateMealTime("breakfast", formattedTime);
+					}}
+
+					placeholder="HH:MM"
+					keyboardType="number-pad"
+					maxLength={5} //format is always 5 chars (e.g. 08:00)
+					style={{ marginBottom: spacing.medium }}
+				/>
+				{/* Repeat similar input logic for lunch, dinner, and supper */}
+
+				<BodyText>{meals.lunch.label}</BodyText>
+
+				<FlatInputField
 					value={meals.lunch.time}
-					onChangeText={(time) => updateMealTime("lunch", time)}
-					placeholder="HH:MM"
-					keyboardType="numeric"
-				/>
-			</View>
+					onChangeText={(text) => {
+						let cleaned = text.replace(/[^0-9]/g, "");
 
-			<View style={styles.inputGroup}>
-				<Text variant="bodyMedium">{meals.dinner.label}</Text>
-				<TextInput
-					style={styles.input}
+						if (cleaned.length > 4) cleaned = cleaned.slice(0, 4);
+
+						let formattedTime = cleaned;
+						if (cleaned.length >= 1) {
+							if (parseInt(cleaned[0]) > 2) formattedTime = "0";
+						}
+						if (cleaned.length >= 2) {
+							if (parseInt(cleaned.slice(0, 2)) > 23) {
+								formattedTime = cleaned.slice(0, 1);
+							} else {
+								formattedTime = cleaned.slice(0, 2) + (cleaned.length > 2 ? ":" : "");
+							}
+						}
+
+						if (cleaned.length >= 3) {
+							if (parseInt(cleaned[2]) > 5) {
+								formattedTime = cleaned.slice(0, 2) + ":";
+							} else {
+								formattedTime = cleaned.slice(0, 2) + ":" + cleaned.slice(2);
+								formattedTime = formattedTime.slice(0, 5);
+							}
+						}
+
+						updateMealTime("lunch", formattedTime);
+					}}
+
+					placeholder="HH:MM"
+					keyboardType="number-pad"
+					maxLength={5}
+					style={{ marginBottom: spacing.medium }}
+				/>
+
+
+				<BodyText>{meals.dinner.label}</BodyText>
+				<FlatInputField
 					value={meals.dinner.time}
-					onChangeText={(time) => updateMealTime("dinner", time)}
-					placeholder="HH:MM"
-					keyboardType="numeric"
-				/>
-			</View>
+					onChangeText={(text) => {
+						let cleaned = text.replace(/[^0-9]/g, "");
 
-			<View style={styles.inputGroup}>
-				<Text variant="bodyMedium">{meals.supper.label}</Text>
-				<TextInput
-					style={styles.input}
+						if (cleaned.length > 4) cleaned = cleaned.slice(0, 4);
+
+						let formattedTime = cleaned;
+						if (cleaned.length >= 1) {
+							if (parseInt(cleaned[0]) > 2) formattedTime = "0";
+						}
+						if (cleaned.length >= 2) {
+							if (parseInt(cleaned.slice(0, 2)) > 23) {
+								formattedTime = cleaned.slice(0, 1);
+							} else {
+								formattedTime = cleaned.slice(0, 2) + (cleaned.length > 2 ? ":" : "");
+							}
+						}
+
+						if (cleaned.length >= 3) {
+							if (parseInt(cleaned[2]) > 5) {
+								formattedTime = cleaned.slice(0, 2) + ":";
+							} else {
+								formattedTime = cleaned.slice(0, 2) + ":" + cleaned.slice(2);
+								formattedTime = formattedTime.slice(0, 5);
+							}
+						}
+
+						updateMealTime("dinner", formattedTime);
+					}}
+
+					placeholder="HH:MM"
+					keyboardType="number-pad"
+					maxLength={5}
+					style={{ marginBottom: spacing.medium }}
+				/>
+
+				<BodyText>{meals.supper.label}</BodyText>
+				<FlatInputField
 					value={meals.supper.time}
-					onChangeText={(time) => updateMealTime("supper", time)}
-					placeholder="HH:MM"
-					keyboardType="numeric"
-				/>
-			</View>
+					onChangeText={(text) => {
+						let cleaned = text.replace(/[^0-9]/g, "");
 
-			{error && (
-				<Text variant="bodyMedium" style={{ color: "red" }}>
-					{error}
-				</Text>
-			)}
-			<Button 
-				mode="contained" 
-				onPress={handleSave}
-				loading={saving || loading}
-				disabled={saving || loading}
-			>
-				Save
-			</Button>
-		</View>
+						if (cleaned.length > 4) cleaned = cleaned.slice(0, 4);
+
+						let formattedTime = cleaned;
+						if (cleaned.length >= 1) {
+							if (parseInt(cleaned[0]) > 2) formattedTime = "0";
+						}
+						if (cleaned.length >= 2) {
+							if (parseInt(cleaned.slice(0, 2)) > 23) {
+								formattedTime = cleaned.slice(0, 1);
+							} else {
+								formattedTime = cleaned.slice(0, 2) + (cleaned.length > 2 ? ":" : "");
+							}
+						}
+
+						if (cleaned.length >= 3) {
+							if (parseInt(cleaned[2]) > 5) {
+								formattedTime = cleaned.slice(0, 2) + ":";
+							} else {
+								formattedTime = cleaned.slice(0, 2) + ":" + cleaned.slice(2);
+								formattedTime = formattedTime.slice(0, 5);
+							}
+						}
+
+						updateMealTime("supper", formattedTime);
+					}}
+
+					placeholder="HH:MM"
+					keyboardType="number-pad"
+					maxLength={5}
+					style={{ marginBottom: spacing.extraLarge }}
+				/>
+
+
+				{error && (
+					<BodyText variant="bodyMedium" style={{ color: "red" }}>
+						{error}
+					</BodyText>
+				)}
+				<SecondaryButton
+					onPress={handleSave}
+					loading={saving || loading}
+					disabled={saving || loading}
+					style={{ marginTop: spacing.extraLarge }}>
+					Save
+				</SecondaryButton>
+			</View>
+		</ScreenWrapper>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		padding: 16,
-		gap: 12,
-	},
-	inputGroup: {
-		gap: 4,
-	},
-	input: {
-		borderWidth: 1,
-		borderColor: "#ccc",
-		borderRadius: 4,
-		padding: 12,
-		fontSize: 16,
-		backgroundColor: "#fff",
-	},
-});
