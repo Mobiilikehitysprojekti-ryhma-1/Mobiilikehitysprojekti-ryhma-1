@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { TextInput, View, StyleSheet, ScrollView, Alert } from "react-native";
 import { Button, Text, ActivityIndicator } from "react-native-paper";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
@@ -7,13 +7,37 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useLocation } from "../state/locationStore";
 import { useAuth } from "../../../shared/hooks/useAuth";
 
+import { useTheme } from "react-native-paper";
+import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
+import { HeaderText } from "../../../shared/components/Texts/HeaderText";
+import { BodyText } from "../../../shared/components/Texts/BodyText";
+import { useAppTheme } from "../../../shared/theme/theme";
+import { FlatInputField } from "../../../shared/components/Fields/FlatInputField";
+import { SecondaryButton } from "../../../shared/components/Button/SecondaryButton";
+import { PrimaryButton } from "../../../shared/components/Button/PrimaryButton";
+import MapView, { Circle, Marker } from "react-native-maps";
+import { useSafetyScreen } from "../../user/state/safetyScreenStore";
+
+const DEFAULT_DELTA = 0.004;
+const FALLBACK_CENTER = { latitude: 60.1699, longitude: 24.9384 };
+
 type Props = BottomTabScreenProps<AdminStackParamList, "LocationSettings">;
 
-export function LocationSettingsScreen({}: Props) {
+export function LocationSettingsScreen({ }: Props) {
+	const theme = useTheme();
+	const { spacing } = useAppTheme();
 	const { user } = useAuth();
-	const location = useLocation(user?.uid);
 
-	// Load existing location when screen comes into focus (real-time updates)
+	const location = useLocation(user?.uid);
+	const mapRef = useRef<MapView>(null);
+	const { home, userPosition } = useSafetyScreen(user?.uid ?? null);
+	const initialRegion = {
+		latitude: home?.lat ?? userPosition?.latitude ?? FALLBACK_CENTER.latitude,
+		longitude: home?.lng ?? userPosition?.longitude ?? FALLBACK_CENTER.longitude,
+		latitudeDelta: DEFAULT_DELTA,
+		longitudeDelta: DEFAULT_DELTA,
+	};
+
 	useFocusEffect(
 		React.useCallback(() => {
 			if (user?.uid) {
@@ -33,6 +57,15 @@ export function LocationSettingsScreen({}: Props) {
 			setRadius(location.location.home.radiusMeters.toString());
 			if (location.location.home.address) {
 				setFormattedAddress(location.location.home.address);
+			}
+			
+			if (mapRef.current) {
+				mapRef.current.animateToRegion({
+					latitude: location.location.home.lat,
+					longitude: location.location.home.lng,
+					latitudeDelta: DEFAULT_DELTA,
+					longitudeDelta: DEFAULT_DELTA,
+				}, 500);
 			}
 		}
 	}, [location.location]);
@@ -55,7 +88,7 @@ export function LocationSettingsScreen({}: Props) {
 
 		try {
 			const result = await location.geocodeAndSave(address.trim(), radiusValue);
-			
+
 			if (result.formattedAddress) {
 				setFormattedAddress(result.formattedAddress);
 				Alert.alert("Success", "Location saved successfully!");
@@ -72,160 +105,110 @@ export function LocationSettingsScreen({}: Props) {
 	const hasLocation = location.location?.home !== undefined;
 
 	return (
-		<ScrollView style={styles.container}>
-			<View style={styles.content}>
-				<Text variant="headlineSmall" style={styles.title}>
-					Set location settings
-				</Text>
+		<ScreenWrapper>
+			<View style={{ top: spacing.extraLarge, padding: spacing.large }}></View>
+			<HeaderText marginBottom="extraLarge">
+				Location Settings
+			</HeaderText>
 
-				{/* Current Location Display */}
-				
-					<View style={styles.currentLocationCard}>
-						<Text variant="titleMedium" style={styles.cardTitle}>
-							Tietokannassa oleva osoite on:
-						</Text>
-						{location.location?.home ? (
-							<>
-								<Text variant="bodyMedium">
-									Latitude: {location.location.home.lat.toFixed(6)}
-								</Text>
-								<Text variant="bodyMedium">
-									Longitude: {location.location.home.lng.toFixed(6)}
-								</Text>
-								<Text variant="bodyMedium">
-									Radius: {location.location.home.radiusMeters} meters
-								</Text>
-								{location.location.home.address && (
-									<Text variant="bodyMedium" style={styles.formattedAddress}>
-										Address: {location.location.home.address}
-									</Text>
-								)}
-							</>
-						) : (
-							<Text variant="bodyMedium">No location data saved</Text>
+			{/* Error Display */}
+			{location.error && (
+				<View>
+					<BodyText>
+						{location.error}
+					</BodyText>
+				</View>
+			)}
+
+			{/* Address Input */}
+			<BodyText >
+				Enter address
+			</BodyText>
+			<FlatInputField
+				value={address}
+				onChangeText={setAddress}
+				placeholder="Mannerheimintie 1, Helsinki, Finland"
+				editable={!isLoading}
+				multiline
+				style={{ marginBottom: spacing.medium }}
+			/>
+
+			{/* Radius Input */}
+			<BodyText>
+				Safety radius (meters)
+			</BodyText>
+			<FlatInputField
+				value={radius}
+				onChangeText={setRadius}
+				placeholder="150"
+				keyboardType="numeric"
+				editable={!isLoading}
+			/>
+
+			{/* Geocode and Save Button */}
+			<SecondaryButton
+				style={{ marginTop: spacing.medium }}
+				onPress={handleGeocodeAndSave}
+				disabled={isLoading || !address.trim() || !radius.trim()}
+				loading={isLoading}
+			>
+				{isLoading ? "Processing..." : "Save Location"}
+			</SecondaryButton>
+
+			{isLoading && (
+				<View>
+					<ActivityIndicator size="small" />
+					<BodyText>
+						Geocoding address...
+					</BodyText>
+				</View>
+			)}
+
+			{/* Current Location Display */}
+
+			<View style={{ marginTop: spacing.extraLarge + 40, padding: spacing.small, backgroundColor: theme.colors.secondary, borderRadius: 0, opacity: hasLocation ? 1 : 0.5 }}>
+				<BodyText >
+					Currently saved location:
+				</BodyText>
+				{location.location?.home ? (
+					<>
+						{location.location.home.address && (
+							<BodyText variant="bodyMedium">
+								Address: {location.location.home.address}
+							</BodyText>
 						)}
-					</View>
-				
 
-				{/* Error Display */}
-				{location.error && (
-					<View style={styles.errorCard}>
-						<Text variant="bodyMedium" style={styles.errorText}>
-							{location.error}
-						</Text>
-					</View>
-				)}
-
-			
-				
-				{/* Address Input */}
-				<Text variant="bodyMedium" style={styles.label}>
-					Enter address
-				</Text>
-				<TextInput
-					style={styles.input}
-					value={address}
-					onChangeText={setAddress}
-					placeholder="Mannerheimintie 1, Helsinki, Finland"
-					editable={!isLoading}
-					multiline
-				/>
-
-				{/* Radius Input */}
-				<Text variant="bodyMedium" style={styles.label}>
-					Safety radius (meters)
-				</Text>
-				<TextInput
-					style={styles.input}
-					value={radius}
-					onChangeText={setRadius}
-					placeholder="150"
-					keyboardType="numeric"
-					editable={!isLoading}
-				/>
-
-				{/* Geocode and Save Button */}
-				<Button
-					mode="contained"
-					onPress={handleGeocodeAndSave}
-					disabled={isLoading || !address.trim() || !radius.trim()}
-					style={styles.button}
-					loading={isLoading}
-				>
-					{isLoading ? "Processing..." : "Geocode and Save Location"}
-				</Button>
-
-				{isLoading && (
-					<View style={styles.loadingContainer}>
-						<ActivityIndicator size="small" />
-						<Text variant="bodySmall" style={styles.loadingText}>
-							Geocoding address...
-						</Text>
-					</View>
+						<BodyText variant="bodyMedium">
+							Safety Radius: {location.location.home.radiusMeters} meters
+						</BodyText>
+					</>
+				) : (
+					<BodyText variant="bodyMedium">No location data saved</BodyText>
 				)}
 			</View>
-		</ScrollView>
+			<MapView
+				ref={mapRef}
+				style={{ flex: 1 }}
+				initialRegion={initialRegion}
+			>
+				{/* 1. The Saved Home Marker */}
+				{home && (
+					<Marker
+						coordinate={{ latitude: home.lat, longitude: home.lng }}
+						title="Saved Home Location"
+					/>
+				)}
+
+				{/* 2. The Safety Circle around Home */}
+				{home && (
+					<Circle
+						center={{ latitude: home.lat, longitude: home.lng }}
+						radius={parseFloat(radius) || home.radiusMeters || 0}
+						strokeColor={theme.colors.primary}
+						fillColor={theme.colors.primary + "33"}
+					/>
+				)}
+			</MapView>
+		</ScreenWrapper>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	content: {
-		padding: 16,
-		gap: 12,
-	},
-	title: {
-		marginBottom: 8,
-	},
-	currentLocationCard: {
-		backgroundColor: "#e3f2fd",
-		padding: 12,
-		borderRadius: 8,
-		marginBottom: 8,
-	},
-	cardTitle: {
-		fontWeight: "bold",
-		marginBottom: 8,
-	},
-	formattedAddress: {
-		marginTop: 8,
-		fontStyle: "italic",
-	},
-	errorCard: {
-		backgroundColor: "#ffebee",
-		padding: 12,
-		borderRadius: 8,
-		marginBottom: 8,
-	},
-	errorText: {
-		color: "#c62828",
-	},
-	label: {
-		marginTop: 8,
-		marginBottom: 4,
-		fontWeight: "500",
-	},
-	input: {
-		borderWidth: 1,
-		borderColor: "#ccc",
-		padding: 12,
-		borderRadius: 8,
-		backgroundColor: "#fff",
-		minHeight: 44,
-	},
-	button: {
-		marginTop: 8,
-	},
-	loadingContainer: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		gap: 8,
-		marginTop: 8,
-	},
-	loadingText: {
-		color: "#666",
-	},
-});
