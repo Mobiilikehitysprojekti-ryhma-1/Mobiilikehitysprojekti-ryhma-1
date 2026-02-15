@@ -45,7 +45,7 @@ export function TodayMedsCard({
 
 	if (!medsSchedule) {
 		return (
-			<Card style={[styles.card, { backgroundColor: theme.colors.secondary, borderRadius: 0 }]}>
+			<Card style={{ backgroundColor: theme.colors.secondary, borderRadius: 0, marginBottom: spacing.medium }}>
 				<Card.Content>
 					<HeaderText marginBottom="small">Meds today</HeaderText>
 					<BodyText variant="bodySmall" style={{ textAlign: "center", color: theme.colors.onSurfaceVariant }}>
@@ -57,7 +57,7 @@ export function TodayMedsCard({
 	}
 
 	return (
-		<Card style={[styles.card, { backgroundColor: theme.colors.secondary, borderRadius: 0 }]}>
+		<Card style={{ backgroundColor: theme.colors.secondary, borderRadius: 0,marginBottom: spacing.medium }}>
 			<Card.Content>
 				<HeaderText marginBottom={spacing.medium} variant="titleMedium" style={{ borderBottomWidth: 1, borderColor: theme.colors.primary }}>
 					Meds today
@@ -71,18 +71,19 @@ export function TodayMedsCard({
 								<BodyText style={styles.label}>{item.label}</BodyText>
 								<BodyText style={styles.time}>{item.time}</BodyText>
 								<View style={styles.statusWrap}>
-									<StatusIcon status={status} />
+
 									{onMarkTaken && status !== "ok" && (
 										<TouchableOpacity
 											style={[styles.markBtn, { marginLeft: spacing.small }]}
 											onPress={() => onMarkTaken(key)}
 											accessibilityLabel={`Mark ${item.label} as taken`}
 										>
-											<BodyText variant="bodySmall" style={{ color: theme.colors.primary }}>
+											<BodyText variant="bodySmall">
 												Mark as taken
 											</BodyText>
 										</TouchableOpacity>
 									)}
+									<StatusIcon status={status} />
 								</View>
 							</View>
 						);
@@ -94,9 +95,7 @@ export function TodayMedsCard({
 }
 
 const styles = StyleSheet.create({
-	card: {
-		marginBottom: 12,
-	},
+
 	rows: {
 		gap: 4,
 	},
