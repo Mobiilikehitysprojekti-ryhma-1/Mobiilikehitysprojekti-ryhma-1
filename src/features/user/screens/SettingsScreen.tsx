@@ -4,74 +4,102 @@ import { logout } from "../../auth/state/authActions";
 import { useAppMode } from "../../../shared/context/appModeContext";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { PrimaryButton } from "../../../shared/components/Button/PrimaryButton";
+import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
+import { BodyText } from "../../../shared/components/Texts/BodyText";
+import { useAppTheme } from "../../../shared/theme/theme";
 
 export default function SettingsScreen() {
 	const theme = useTheme();
+	const { spacing, width } = useAppTheme();
 	const { mode, setMode, resetToModePicker } = useAppMode();
 	const { user } = useAuth();
 	const oletustilaLabel = mode === "admin" ? "Admin" : "Käyttäjä";
 
 	return (
-		<ScrollView
-			style={{
-				flex: 1,
-				backgroundColor: theme.colors.primaryContainer,
-			}}
-			contentContainerStyle={{
-				paddingTop: 24,
-				padding: 16,
-				gap: 12,
-			}}
-		>
-			<Text
-				style={{ color: theme.colors.onPrimary }}
-				variant="headlineSmall"
-			>
-				Asetukset
-			</Text>
+		<ScreenWrapper>
+			<View style={{
+				marginTop: spacing.extraLarge + 80,
+				right: spacing.medium,
+				zIndex: 10
+			}}>
+			</View>
 
-			<Text
+			<PrimaryButton style={{ marginBottom: spacing.medium }} onPress={() => setMode("user")}>
+				Change to user mode
+			</PrimaryButton>
+
+			<PrimaryButton onPress={logout}>
+				Log out
+			</PrimaryButton>
+			<View
 				style={{
-					fontWeight: "bold",
-					color: theme.colors.onPrimary,
-					opacity: 0.9,
-					marginTop: 8,
-				}}
-				variant="bodySmall"
-			>
-				User ID: {user?.uid}
-			</Text>
-			<Text
-				style={{ color: theme.colors.onPrimary, opacity: 0.9 }}
-				variant="bodySmall"
-			>
-				Nykyinen oletustila: {oletustilaLabel}
-			</Text>
+					width: width.full,
+					alignSelf: "center",
+					marginTop: spacing.extraLarge + 30,
+				}}>
+				<PrimaryButton style={{ backgroundColor: theme.colors.error }} onPress={resetToModePicker}>
+					Remove default app mode
+				</PrimaryButton>
 
-			<PrimaryButton
-				mode="contained"
-				buttonColor={theme.colors.secondary}
-				textColor={theme.colors.onSecondary}
-				onPress={() => setMode("admin")}
-			>
-				Siirry ADMIN näkymään
-			</PrimaryButton>
-			<PrimaryButton
-				mode="outlined"
-				buttonColor={theme.colors.error}
-				textColor={theme.colors.onError}
-				onPress={resetToModePicker}
-			>
-				Tyhjennä oletustila (poista tallennettu valinta)
-			</PrimaryButton>
-			<PrimaryButton
-				mode="contained"
-				buttonColor={theme.colors.secondary}
-				textColor={theme.colors.onSecondary}
-				onPress={logout}
-			>
-				Kirjaudu ulos tililtä
-			</PrimaryButton>
-		</ScrollView>
+				<BodyText marginTop="medium" variant="bodyMedium" style={{ alignSelf: "center" }}>
+					Current default mode: {oletustilaLabel}
+				</BodyText>
+			</View>
+
+			{/* FIREBASE TESTIT
+				<HeaderText
+					style={{ marginTop: 16, marginBottom: 8, color: theme.colors.onPrimary }}
+					variant="titleMedium"
+				>
+					Firebase Testit
+				</HeaderText>
+
+				<PrimaryButton
+					disabled={adminHome.isChecking}
+					buttonColor={theme.colors.secondary}
+					textColor={theme.colors.onSecondary}
+					onPress={adminHome.checkConnection}
+				>
+					{adminHome.isChecking ? "Checking..." : "Check Firebase Connection"}
+				</PrimaryButton>
+
+				{adminHome.connectionStatus ? (
+					<BodyText
+						style={{ marginTop: 8, color: theme.colors.onPrimary }}
+						variant="bodyMedium"
+					>
+						{adminHome.connectionStatus}
+					</BodyText>
+				) : null}
+
+				<PrimaryButton
+					disabled={!user}
+					buttonColor={theme.colors.secondary}
+					textColor={theme.colors.onSecondary}
+					onPress={runTest}
+				>
+					Testaa Firestore get/set testidatalla
+				</PrimaryButton>
+
+				<PrimaryButton 
+					disabled={!user || isGeneratingBP}
+					buttonColor={theme.colors.secondary}
+					textColor={theme.colors.onSecondary}
+					onPress={generateBPHistoryTestData}
+				>
+					{isGeneratingBP ? "Luodaan BP-historiaa..." : "Luo BP-historia (14 päivää)"}
+				</PrimaryButton>
+
+				{bpGenerationStatus ? (
+					<BodyText
+						style={{ marginTop: 8, color: theme.colors.onPrimary }}
+						variant="bodyMedium"
+					>
+						{bpGenerationStatus}
+					</BodyText>
+				) : null}
+*/}
+
+		</ScreenWrapper>
 	);
 }

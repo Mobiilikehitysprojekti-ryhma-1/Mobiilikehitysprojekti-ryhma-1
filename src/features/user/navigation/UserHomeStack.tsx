@@ -28,19 +28,13 @@ export function UserHomeStack() {
 	const theme = useTheme();
 
 	return (
-		<Stack.Navigator
-			screenOptions={{
-				headerStyle: {
-					backgroundColor: theme.colors.primaryContainer,
-				},
-				headerTintColor: theme.colors.onPrimary,
-			}}
-		>
+		<Stack.Navigator>
 			<Stack.Screen
 				name="UserHome"
 				component={HomeScreen}
 				options={{
 					title: "USER home",
+					headerShown: false,
 					headerRight: () => <SettingsButton />,
 				}}
 			/>
@@ -48,7 +42,10 @@ export function UserHomeStack() {
 				name="Settings"
 				component={SettingsScreen}
 				options={{
-					title: "Asetukset",
+					headerShown: true,
+					title: "Settings",
+					headerTransparent: true,
+					headerTintColor: '#fff',
 				}}
 			/>
 		</Stack.Navigator>
