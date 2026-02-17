@@ -58,7 +58,7 @@ export function LocationSettingsScreen({ }: Props) {
 			if (location.location.home.address) {
 				setFormattedAddress(location.location.home.address);
 			}
-			
+
 			if (mapRef.current) {
 				mapRef.current.animateToRegion({
 					latitude: location.location.home.lat,
@@ -106,109 +106,110 @@ export function LocationSettingsScreen({ }: Props) {
 
 	return (
 		<ScreenWrapper>
-			<View style={{ top: spacing.extraLarge, padding: spacing.large }}></View>
-			<HeaderText marginBottom="extraLarge">
-				Location Settings
-			</HeaderText>
+			<View style={{ top: spacing.extraLarge, padding: spacing.large }}>
+				<HeaderText marginBottom="extraLarge">
+					Location Settings
+				</HeaderText>
 
-			{/* Error Display */}
-			{location.error && (
-				<View>
-					<BodyText>
-						{location.error}
-					</BodyText>
-				</View>
-			)}
-
-			{/* Address Input */}
-			<BodyText >
-				Enter address
-			</BodyText>
-			<FlatInputField
-				value={address}
-				onChangeText={setAddress}
-				placeholder="Mannerheimintie 1, Helsinki, Finland"
-				editable={!isLoading}
-				multiline
-				style={{ marginBottom: spacing.medium }}
-			/>
-
-			{/* Radius Input */}
-			<BodyText>
-				Safety radius (meters)
-			</BodyText>
-			<FlatInputField
-				value={radius}
-				onChangeText={setRadius}
-				placeholder="150"
-				keyboardType="numeric"
-				editable={!isLoading}
-			/>
-
-			{/* Geocode and Save Button */}
-			<SecondaryButton
-				style={{ marginTop: spacing.medium }}
-				onPress={handleGeocodeAndSave}
-				disabled={isLoading || !address.trim() || !radius.trim()}
-				loading={isLoading}
-			>
-				{isLoading ? "Processing..." : "Save Location"}
-			</SecondaryButton>
-
-			{isLoading && (
-				<View>
-					<ActivityIndicator size="small" />
-					<BodyText>
-						Geocoding address...
-					</BodyText>
-				</View>
-			)}
-
-			{/* Current Location Display */}
-
-			<View style={{ marginTop: spacing.extraLarge + 40, padding: spacing.small, backgroundColor: theme.colors.secondary, borderRadius: 0, opacity: hasLocation ? 1 : 0.5 }}>
-				<BodyText >
-					Currently saved location:
-				</BodyText>
-				{location.location?.home ? (
-					<>
-						{location.location.home.address && (
-							<BodyText variant="bodyMedium">
-								Address: {location.location.home.address}
-							</BodyText>
-						)}
-
-						<BodyText variant="bodyMedium">
-							Safety Radius: {location.location.home.radiusMeters} meters
+				{/* Error Display */}
+				{location.error && (
+					<View>
+						<BodyText>
+							{location.error}
 						</BodyText>
-					</>
-				) : (
-					<BodyText variant="bodyMedium">No location data saved</BodyText>
-				)}
-			</View>
-			<MapView
-				ref={mapRef}
-				style={{ flex: 1 }}
-				initialRegion={initialRegion}
-			>
-				{/* 1. The Saved Home Marker */}
-				{home && (
-					<Marker
-						coordinate={{ latitude: home.lat, longitude: home.lng }}
-						title="Saved Home Location"
-					/>
+					</View>
 				)}
 
-				{/* 2. The Safety Circle around Home */}
-				{home && (
-					<Circle
-						center={{ latitude: home.lat, longitude: home.lng }}
-						radius={parseFloat(radius) || home.radiusMeters || 0}
-						strokeColor={theme.colors.primary}
-						fillColor={theme.colors.primary + "33"}
-					/>
+				{/* Address Input */}
+				<BodyText >
+					Enter address
+				</BodyText>
+				<FlatInputField
+					value={address}
+					onChangeText={setAddress}
+					placeholder="Mannerheimintie 1, Helsinki, Finland"
+					editable={!isLoading}
+					multiline
+					style={{ marginBottom: spacing.medium }}
+				/>
+
+				{/* Radius Input */}
+				<BodyText>
+					Safety radius (meters)
+				</BodyText>
+				<FlatInputField
+					value={radius}
+					onChangeText={setRadius}
+					placeholder="150"
+					keyboardType="numeric"
+					editable={!isLoading}
+				/>
+
+				{/* Geocode and Save Button */}
+				<SecondaryButton
+					style={{ marginTop: spacing.medium }}
+					onPress={handleGeocodeAndSave}
+					disabled={isLoading || !address.trim() || !radius.trim()}
+					loading={isLoading}
+				>
+					{isLoading ? "Processing..." : "Save Location"}
+				</SecondaryButton>
+
+				{isLoading && (
+					<View>
+						<ActivityIndicator size="small" />
+						<BodyText>
+							Geocoding address...
+						</BodyText>
+					</View>
 				)}
-			</MapView>
+
+				{/* Current Location Display */}
+
+				<View style={{ marginTop: spacing.extraLarge + 40, padding: spacing.small, backgroundColor: theme.colors.secondary, borderRadius: 0, opacity: hasLocation ? 1 : 0.5 }}>
+					<BodyText >
+						Currently saved location:
+					</BodyText>
+					{location.location?.home ? (
+						<>
+							{location.location.home.address && (
+								<BodyText variant="bodyMedium">
+									Address: {location.location.home.address}
+								</BodyText>
+							)}
+
+							<BodyText variant="bodyMedium">
+								Safety Radius: {location.location.home.radiusMeters} meters
+							</BodyText>
+						</>
+					) : (
+						<BodyText variant="bodyMedium">No location data saved</BodyText>
+					)}
+				</View>
+				<MapView
+					ref={mapRef}
+					style={{ height: spacing.extraLarge * 7, marginTop: spacing.extraSmall }}
+					initialRegion={initialRegion}
+				>
+					{/* 1. The Saved Home Marker */}
+					{home && (
+						<Marker
+							coordinate={{ latitude: home.lat, longitude: home.lng }}
+							title="Saved Home Location"
+						/>
+					)}
+
+					{/* 2. The Safety Circle around Home */}
+					{home && (
+						<Circle
+							center={{ latitude: home.lat, longitude: home.lng }}
+							radius={parseFloat(radius) || home.radiusMeters || 0}
+							strokeColor={theme.colors.primary}
+							fillColor={theme.colors.primary + "33"}
+						/>
+					)}
+				</MapView>
+			</View>
 		</ScreenWrapper>
 	);
 }
