@@ -12,15 +12,15 @@ const Tab = createBottomTabNavigator<UserStackParamList>();
 export function UserStack() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={UserHomeStack} options={{
-        title: "Home",
+      <Tab.Screen name="Home" component={UserHomeStack} options={{ title: "Home", headerShown: false }} />
+      <Tab.Screen name="Measurements" component={MeasurementsScreen} options={{ title: "Camera" }} />
+      <Tab.Screen name="Safety" component={SafetyScreen} options={{
+        title: "GPS",
         headerShown: false,
         tabBarIcon: ({ color, size }) => (
-          <Icon source="home" color={color} size={size} />
+          <Icon source="map-marker" color={color} size={size} />
         ),
       }} />
-      <Tab.Screen name="Measurements" component={MeasurementsScreen} options={{ title: "Camera" }} />
-      <Tab.Screen name="Safety" component={SafetyScreen} options={{ title: "GPS" }} />
     </Tab.Navigator>
   );
 }
