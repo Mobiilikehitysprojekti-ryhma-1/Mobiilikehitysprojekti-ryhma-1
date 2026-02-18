@@ -15,6 +15,7 @@ import { useAppTheme } from "../../../shared/theme/theme";
 import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
 import { HeaderText } from "../../../shared/components/Texts/HeaderText";
 import { BodyText } from "../../../shared/components/Texts/BodyText";
+import { useNavigation } from "@react-navigation/native";
 
 export function SettingsScreen() {
 	const theme = useTheme();
@@ -22,6 +23,10 @@ export function SettingsScreen() {
 	const { user } = useAuth();
 	const { mode, setMode, resetToModePicker } = useAppMode();
 	const oletustilaLabel = mode === "admin" ? "Admin" : "Käyttäjä";
+	const navigation = useNavigation<any>();
+	const goToPasswordManagement = () => {
+		navigation.navigate("PasswordManagement");
+	};
 
 	// State layer - handles all business logic and data access
 	const adminHome = useAdminHome(user?.uid);
@@ -307,9 +312,14 @@ export function SettingsScreen() {
 				Change to user mode
 			</PrimaryButton>
 
-			<PrimaryButton onPress={logout}>
+			<PrimaryButton style={{ marginBottom: spacing.medium }} onPress={logout}>
 				Log out
 			</PrimaryButton>
+
+			<PrimaryButton style={{ marginBottom: spacing.medium }} onPress={goToPasswordManagement}>
+				Change password
+			</PrimaryButton>
+
 			<View
 				style={{
 					width: width.full,

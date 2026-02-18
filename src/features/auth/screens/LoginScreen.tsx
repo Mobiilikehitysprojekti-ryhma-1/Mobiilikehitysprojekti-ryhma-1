@@ -56,6 +56,18 @@ export default function LoginScreen() {
                     >
                         Sign in
                     </PrimaryButton>
+                    <View style={{ height: spacing.medium }} />
+
+                    <Text
+                        style={{
+                            textAlign: "center",
+                            color: theme.colors.secondary,
+                            textDecorationLine: "underline",
+                        }}
+                        onPress={() => nav.navigate("ResetPassword")}
+                    >
+                        Forgot Password?
+                    </Text>
                 </View>
             </View>
 
