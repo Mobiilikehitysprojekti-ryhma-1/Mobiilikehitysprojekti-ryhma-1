@@ -4,6 +4,7 @@ import { useTheme } from "react-native-paper";
 import type { AdminHomeStackParamList } from "./types";
 import { AdminHomeScreen } from "../screens/AdminHomeScreen";
 import { SettingsScreen } from "../screens/SettingsScreen";
+import { PasswordManagement } from "../screens/PasswordManagement";
 
 const Stack = createNativeStackNavigator<AdminHomeStackParamList>();
 
@@ -25,6 +26,16 @@ export function AdminHomeStack() {
 					title: "Settings",
 					headerTransparent: true,
 					headerTintColor: '#fff',
+				}}
+			/>
+			<Stack.Screen
+				name="PasswordManagement"
+				component={PasswordManagement}
+				options={{
+					headerShown: true,
+					title: "Password",
+					headerTransparent: true,
+					headerTintColor: "#fff",
 				}}
 			/>
 		</Stack.Navigator>

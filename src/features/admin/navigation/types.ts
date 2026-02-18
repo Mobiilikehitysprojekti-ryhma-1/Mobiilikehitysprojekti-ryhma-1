@@ -1,6 +1,7 @@
 export type AdminHomeStackParamList = {
   AdminHomeMain: undefined;
   Settings: undefined;
+  PasswordManagement: undefined;
 };
 
 export type AdminStackParamList = {
@@ -10,3 +11,4 @@ export type AdminStackParamList = {
   LocationSettings: undefined;
   MeasurementsHistory: undefined;
 };
+
