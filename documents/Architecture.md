@@ -13,9 +13,21 @@
                 data/
                 domain/
                 tests/
-            tasks/
-            measurements/
-            safety/
+            admin/
+                /components
+                /data
+                /domain
+                /navigation
+                /screens
+                /state
+                /tests
+            user/
+                /components
+                /data
+                /domain
+                /navigation
+                /screens
+                /state         
         shared/
             hooks/
             types/
