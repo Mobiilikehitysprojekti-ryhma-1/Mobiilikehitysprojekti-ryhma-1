@@ -61,9 +61,26 @@ export default function NotificationsDemo({ mealsSchedule, medsSchedule }: Props
   // Show Alert when a notification is received (foreground) or when user taps it
   useEffect(() => {
     const showAlert = (title: string, body: string) => {
-      Alert.alert(title, body, [{ text: "OK" }]);
-    };
+        Alert.alert(title, body, [
+          {
+            text: "Ei otettu",
+            style: "cancel",
+            onPress: () => {
+              console.log("Käyttäjä ei ottanut");
+              // tee jotain: esim. peru hälytys / merkitse väliin
+            },
+          },
+          {
+            text: "Otettu",
+            onPress: () => {
+              console.log("Käyttäjä otti");
+              // tee jotain: esim. kuittaa lääke / tallenna DB
+            },
+          },
+        ]);
+      };
 
+      
     const received = Notifications.addNotificationReceivedListener((notification) => {
       const { title, body } = notification.request.content;
       showAlert(title ?? "Ilmoitus", body ?? "");
@@ -194,28 +211,29 @@ export default function NotificationsDemo({ mealsSchedule, medsSchedule }: Props
     await Notifications.cancelAllScheduledNotificationsAsync();
     await Notifications.dismissAllNotificationsAsync(); // poistaa myös näkyvät
     setScheduled([]);
-    Alert.alert("Poistettu", "Kaikki ajastetut hälytykset poistettu.");
+    
+    Alert.alert("Poistettu", "Kaikki ajastetut hälytykset poistettu."); 
   }
 
   return (
     <View style={{ flex: 1, padding: 16, gap: 12 }}>
-      <Text style={{ fontSize: 18, fontWeight: "600" }}>
-        Local-notifikaatio demo (Expo)
-      </Text>
-
+      
+{/* 
       <Button title="Luo hälytys 60 sek päästä" onPress={createAlarmIn60Seconds} />
       <Button title="Lue kaikki hälytykset" onPress={readAllAlarms} />
-      <Button title="Poista kaikki hälytykset" onPress={deleteAllAlarms} />
+    
 
       <Text style={{ marginTop: 12, fontWeight: "600" }}>
         Ajastetut hälytykset ({scheduled.length})
-      </Text>
+      </Text> 
 
       <ScrollView style={{ flex: 1, borderWidth: 1, borderRadius: 8, padding: 8 }}>
         <Text selectable style={{ fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace" }}>
           {scheduled.length ? safeStringify(scheduled) : "Ei ajastettuja hälytyksiä."}
         </Text>
       </ScrollView>
+      */}
+        <Button title="Poista kaikki hälytykset laitteesta" onPress={deleteAllAlarms} />
     </View>
   );
 }

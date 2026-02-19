@@ -73,7 +73,7 @@ export default function HomeScreen() {
 				contentContainerStyle={{ top: spacing.extraLarge, padding: spacing.large, paddingBottom: spacing.extraLarge }}
 				showsVerticalScrollIndicator={false}
 			>
-				<Notifications mealsSchedule={mealsSchedule} medsSchedule={medsSchedule} />
+				
 				<TodayFoodCard
 					mealsSchedule={mealsSchedule}
 					mealsStatus={todayStatus?.meals}
@@ -84,6 +84,7 @@ export default function HomeScreen() {
 					medsStatus={todayStatus?.meds}
 					onMarkTaken={markMedTaken}
 				/>
+				<Notifications mealsSchedule={mealsSchedule} medsSchedule={medsSchedule} />
 			</ScrollView>
 		</ScreenWrapper>
 	);
