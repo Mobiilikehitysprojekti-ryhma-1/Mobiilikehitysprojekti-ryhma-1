@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, Button, Platform, Alert, ScrollView } from "react-native";
+import { View, Text, Button, Platform, Alert, ScrollView, Pressable } from "react-native";
 import * as Notifications from "expo-notifications";
 import type { MealsItems } from "../../admin/data/mealsRepository";
 import type { MedsItems } from "../../admin/data/medsRepository";
@@ -233,7 +233,36 @@ export default function NotificationsDemo({ mealsSchedule, medsSchedule }: Props
         </Text>
       </ScrollView>
       */}
-        <Button title="Poista kaikki hälytykset laitteesta" onPress={deleteAllAlarms} />
+        <Pressable
+          onPress={deleteAllAlarms}
+          style={() => [
+            {
+              width: 28,
+              height: 28,
+              borderRadius: 14,
+              backgroundColor: "transparent",
+              alignItems: "center",
+              justifyContent: "center",
+            },
+          ]}
+        >
+          <Text style={{ fontSize: 16, fontWeight: "600", color: "#333" }}>×</Text>
+        </Pressable>
+        <Pressable
+          onPress={readAllAlarms}
+          style={() => [
+            {
+              width: 28,
+              height: 28,
+              borderRadius: 14,
+              backgroundColor: "transparent",
+              alignItems: "center",
+              justifyContent: "center",
+            },
+          ]}
+        >
+          <Text style={{ fontSize: 16, fontWeight: "600", color: "#333" }}>o</Text>
+        </Pressable>
     </View>
   );
 }

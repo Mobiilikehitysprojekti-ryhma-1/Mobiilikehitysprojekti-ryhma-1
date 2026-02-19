@@ -11,7 +11,7 @@ import { useAppTheme } from "../../../shared/theme/theme";
 export default function SettingsScreen() {
 	const theme = useTheme();
 	const { spacing, width } = useAppTheme();
-	const { mode, setMode, resetToModePicker } = useAppMode();
+	const { mode, resetToModePicker } = useAppMode();
 	const { user } = useAuth();
 	const oletustilaLabel = mode === "admin" ? "Admin" : "Käyttäjä";
 
@@ -23,10 +23,6 @@ export default function SettingsScreen() {
 				zIndex: 10
 			}}>
 			</View>
-
-			<PrimaryButton style={{ marginBottom: spacing.medium }} onPress={() => setMode("user")}>
-				Change to user mode
-			</PrimaryButton>
 
 			<PrimaryButton onPress={logout}>
 				Log out
