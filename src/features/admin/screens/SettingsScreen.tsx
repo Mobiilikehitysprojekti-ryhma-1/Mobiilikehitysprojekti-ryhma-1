@@ -21,7 +21,7 @@ export function SettingsScreen() {
 	const theme = useTheme();
 	const { spacing, width, height } = useAppTheme();
 	const { user } = useAuth();
-	const { mode, setMode, resetToModePicker } = useAppMode();
+	const { mode, resetToModePicker } = useAppMode();
 	const oletustilaLabel = mode === "admin" ? "Admin" : "Käyttäjä";
 	const navigation = useNavigation<any>();
 	const goToPasswordManagement = () => {
@@ -307,10 +307,6 @@ export function SettingsScreen() {
 				zIndex: 10
 			}}>
 			</View>
-
-			<PrimaryButton style={{ marginBottom: spacing.medium }} onPress={() => setMode("user")}>
-				Change to user mode
-			</PrimaryButton>
 
 			<PrimaryButton style={{ marginBottom: spacing.medium }} onPress={logout}>
 				Log out

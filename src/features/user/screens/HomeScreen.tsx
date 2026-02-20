@@ -9,6 +9,7 @@ import { BodyText } from "../../../shared/components/Texts/BodyText";
 import { useAppTheme } from "../../../shared/theme/theme";
 import { SecondaryButton } from "../../../shared/components/Button/SecondaryButton";
 import { SettingsButton } from "../../../shared/components/Button/SettingsButton";
+import Notifications from "../components/Notifications";
 
 export default function HomeScreen() {
 	const theme = useTheme();
@@ -72,6 +73,7 @@ export default function HomeScreen() {
 				contentContainerStyle={{ top: spacing.extraLarge, padding: spacing.large, paddingBottom: spacing.extraLarge }}
 				showsVerticalScrollIndicator={false}
 			>
+				
 				<TodayFoodCard
 					mealsSchedule={mealsSchedule}
 					mealsStatus={todayStatus?.meals}
@@ -82,6 +84,7 @@ export default function HomeScreen() {
 					medsStatus={todayStatus?.meds}
 					onMarkTaken={markMedTaken}
 				/>
+				<Notifications mealsSchedule={mealsSchedule} medsSchedule={medsSchedule} />
 			</ScrollView>
 		</ScreenWrapper>
 	);
