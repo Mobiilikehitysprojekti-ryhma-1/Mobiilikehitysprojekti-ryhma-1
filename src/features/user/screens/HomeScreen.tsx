@@ -1,5 +1,5 @@
 import { View, ScrollView } from "react-native";
-import { useTheme, ActivityIndicator } from "react-native-paper";
+import { ActivityIndicator } from "react-native-paper";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useHomeSchedule } from "../state/homeScheduleStore";
 import { TodayFoodCard } from "../components/TodayFoodCard";
@@ -12,8 +12,8 @@ import { SettingsButton } from "../../../shared/components/Button/SettingsButton
 import Notifications from "../components/Notifications";
 
 export default function HomeScreen() {
-	const theme = useTheme();
-	const { spacing } = useAppTheme();
+    const theme = useAppTheme();
+    const { spacing, colors } = theme;
 	const { user } = useAuth();
 	const {
 		mealsSchedule,
@@ -30,7 +30,7 @@ export default function HomeScreen() {
 		return (
 			<ScreenWrapper>
 				<View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: spacing.large }}>
-					<ActivityIndicator size="large" color={theme.colors.primary} />
+					<ActivityIndicator size="large" color={colors.primary} />
 					<BodyText variant="bodyMedium" style={{ marginTop: spacing.medium }}>
 						Ladataan...
 					</BodyText>
@@ -45,11 +45,11 @@ export default function HomeScreen() {
 				<View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: spacing.large }}>
 					<BodyText
 						variant="bodyMedium"
-						style={{ color: theme.colors.error, textAlign: "center", marginBottom: spacing.medium }}
+						style={{ color: colors.error, textAlign: "center", marginBottom: spacing.medium }}
 					>
 						{error}
 					</BodyText>
-					<SecondaryButton buttonColor={theme.colors.secondary} textColor={theme.colors.onSecondary} onPress={refetch}>
+					<SecondaryButton buttonColor={colors.secondary} textColor={colors.onSecondary} onPress={refetch}>
 						Yritä uudelleen
 					</SecondaryButton>
 				</View>

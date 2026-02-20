@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { View } from "react-native";
-import { useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { AuthStackParamList } from "../../../app/navigation/auth/AuthNavigator";
@@ -14,8 +13,8 @@ import { SecondaryButton } from "../../../shared/components/Button/SecondaryButt
 import { useAppTheme } from "../../../shared/theme/theme";
 
 export default function ResetPassword() {
-    const theme = useTheme();
-    const { spacing, width } = useAppTheme();
+    const theme = useAppTheme();
+    const { spacing, width, colors } = theme;
     const nav = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
 
     const [email, setEmail] = useState("");
@@ -55,8 +54,8 @@ export default function ResetPassword() {
 
                     <PrimaryButton
                         disabled={!canSubmit()}
-                        buttonColor={theme.colors.secondary}
-                        textColor={theme.colors.onSecondary}
+                        buttonColor={colors.secondary}
+                        textColor={colors.onSecondary}
                         onPress={handleSend}
                     >
                         Send reset email

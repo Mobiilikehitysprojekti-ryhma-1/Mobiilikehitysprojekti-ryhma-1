@@ -1,32 +1,34 @@
-import { TextInput, TextInputProps, useTheme } from 'react-native-paper';
+import { TextInput, TextInputProps } from 'react-native-paper';
+import { useAppTheme } from '../../theme/theme';
 
 export function FlatInputField(props: TextInputProps) {
-  const theme = useTheme();
-  
+  const theme = useAppTheme();
+  const { colors } = theme;
+
   return (
     <TextInput
       mode="flat"
       style={[
-        { 
-          height: 62, 
-          backgroundColor: theme.colors.surface,
-        }, 
+        {
+          height: 62,
+          backgroundColor: colors.surface,
+        },
         props.style
       ]}
       theme={{
         colors: {
-          background: 'transparent', 
-          primary: theme.colors.primary,
-          text: theme.colors.onSurface, // Text color from theme
-          placeholder: theme.colors.onSurfaceVariant,
-          onSurface: theme.colors.onSurface, // Label color
-          onSurfaceVariant: theme.colors.onSurfaceVariant,
+          background: 'transparent',
+          primary: colors.primary,
+          text: colors.onSurface,
+          placeholder: colors.onSurfaceVariant,
+          onSurface: colors.onSurface,
+          onSurfaceVariant: colors.onSurfaceVariant,
         },
         roundness: 0
       }}
-      underlineColor={theme.colors.outline}
-      activeUnderlineColor={theme.colors.primary}
-      selectionColor={theme.colors.primary}
+      underlineColor={colors.outline}
+      activeUnderlineColor={colors.primary}
+      selectionColor={colors.primary}
       {...props}
     />
   );

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { View, ScrollView } from "react-native";
-import { useTheme, Text } from "react-native-paper";
+import { View } from "react-native";
 import { logout } from "../../auth/state/authActions";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useAppMode } from "../../../shared/context/appModeContext";
@@ -18,8 +17,8 @@ import { BodyText } from "../../../shared/components/Texts/BodyText";
 import { useNavigation } from "@react-navigation/native";
 
 export function SettingsScreen() {
-	const theme = useTheme();
-	const { spacing, width, height } = useAppTheme();
+	const theme = useAppTheme();
+	const { spacing, width, height, colors } = theme;
 	const { user } = useAuth();
 	const { mode, resetToModePicker } = useAppMode();
 	const oletustilaLabel = mode === "admin" ? "Admin" : "Käyttäjä";
@@ -289,7 +288,7 @@ export function SettingsScreen() {
 					flex: 1,
 					padding: 16,
 					gap: 12,
-					backgroundColor: theme.colors.primaryContainer,
+					backgroundColor: colors.primaryContainer,
 				}}
 			>
 				<BodyText variant="bodyMedium">
@@ -322,7 +321,7 @@ export function SettingsScreen() {
 					alignSelf: "center",
 					marginTop: spacing.extraLarge + 30,
 				}}>
-				<PrimaryButton style={{ backgroundColor: theme.colors.error }} onPress={resetToModePicker}>
+				<PrimaryButton style={{ backgroundColor: colors.error }} onPress={resetToModePicker}>
 					Remove default app mode
 				</PrimaryButton>
 
@@ -330,61 +329,6 @@ export function SettingsScreen() {
 					Current default mode: {oletustilaLabel}
 				</BodyText>
 			</View>
-
-			{/* FIREBASE TESTIT
-				<HeaderText
-					style={{ marginTop: 16, marginBottom: 8, color: theme.colors.onPrimary }}
-					variant="titleMedium"
-				>
-					Firebase Testit
-				</HeaderText>
-
-				<PrimaryButton
-					disabled={adminHome.isChecking}
-					buttonColor={theme.colors.secondary}
-					textColor={theme.colors.onSecondary}
-					onPress={adminHome.checkConnection}
-				>
-					{adminHome.isChecking ? "Checking..." : "Check Firebase Connection"}
-				</PrimaryButton>
-
-				{adminHome.connectionStatus ? (
-					<BodyText
-						style={{ marginTop: 8, color: theme.colors.onPrimary }}
-						variant="bodyMedium"
-					>
-						{adminHome.connectionStatus}
-					</BodyText>
-				) : null}
-
-				<PrimaryButton
-					disabled={!user}
-					buttonColor={theme.colors.secondary}
-					textColor={theme.colors.onSecondary}
-					onPress={runTest}
-				>
-					Testaa Firestore get/set testidatalla
-				</PrimaryButton>
-
-				<PrimaryButton 
-					disabled={!user || isGeneratingBP}
-					buttonColor={theme.colors.secondary}
-					textColor={theme.colors.onSecondary}
-					onPress={generateBPHistoryTestData}
-				>
-					{isGeneratingBP ? "Luodaan BP-historiaa..." : "Luo BP-historia (14 päivää)"}
-				</PrimaryButton>
-
-				{bpGenerationStatus ? (
-					<BodyText
-						style={{ marginTop: 8, color: theme.colors.onPrimary }}
-						variant="bodyMedium"
-					>
-						{bpGenerationStatus}
-					</BodyText>
-				) : null}
-*/}
-
 		</ScreenWrapper>
 	);
 }

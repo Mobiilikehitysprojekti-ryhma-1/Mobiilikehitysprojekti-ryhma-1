@@ -1,4 +1,5 @@
-import { Button, ButtonProps, useTheme } from 'react-native-paper';
+import { Button, ButtonProps } from 'react-native-paper';
+import { useAppTheme } from '../../theme/theme';
 
 export function SecondaryButton({
   textColor,
@@ -8,15 +9,16 @@ export function SecondaryButton({
   mode = "outlined",
   ...rest
 }: ButtonProps) {
-  const theme = useTheme();
+  const theme = useAppTheme();
+  const { colors } = theme;
 
   return (
     <Button
       mode={mode}
-      buttonColor={buttonColor ?? theme.colors.primary}
-      textColor={textColor ?? theme.colors.onPrimary}
+      buttonColor={buttonColor ?? colors.primary}
+      textColor={textColor ?? colors.onPrimary}
       style={[
-        { 
+        {
           borderRadius: 0,
           padding: 8
         },

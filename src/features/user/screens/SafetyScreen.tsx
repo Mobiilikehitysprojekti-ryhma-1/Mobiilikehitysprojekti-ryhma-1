@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, Switch, View } from "react-native";
-import { Appbar, Text, useTheme } from "react-native-paper";
 
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useSafetyScreen } from "../state/safetyScreenStore";
@@ -20,8 +19,8 @@ const DEFAULT_DELTA = 0.004;
 const FALLBACK_CENTER = { latitude: 60.1699, longitude: 24.9384 };
 
 export default function SafetyScreen() {
-  const theme = useTheme();
-  const { spacing } = useAppTheme();
+  const theme = useAppTheme();
+  const { spacing, colors } = theme;
   const { user } = useAuth();
   const { home, loading, error, status, distanceM, inside, userPosition } =
     useSafetyScreen(user?.uid ?? null);
@@ -65,12 +64,12 @@ export default function SafetyScreen() {
           Turvallisuus
         </HeaderText>
 
-        <View style={{ flexDirection: "row", backgroundColor: theme.colors.secondary, padding: spacing.small, marginBottom: spacing.medium, alignItems: "center", justifyContent: "space-between" }}>
+        <View style={{ flexDirection: "row", backgroundColor: colors.secondary, padding: spacing.small, marginBottom: spacing.medium, alignItems: "center", justifyContent: "space-between" }}>
           <BodyText marginHorizontal="medium">Tracking: {isTrackingEnabled ? "Enabled" : "Disabled"}</BodyText>
           <Switch
             value={isTrackingEnabled}
             onValueChange={setIsTrackingEnabled}
-            trackColor={{ false: theme.colors.tertiary, true: theme.colors.primary }}
+            trackColor={{ false: colors.tertiary, true: colors.primary }}
           />
 
         </View>
@@ -104,14 +103,13 @@ export default function SafetyScreen() {
         </MapView>
 
 
-        <View style={{ padding: spacing.medium, justifyContent: "center", backgroundColor: theme.colors.secondary }}>
+        <View style={{ padding: spacing.medium, justifyContent: "center", backgroundColor: colors.secondary }}>
           {error ? <BodyText style={{ color: "red" }}>{error}</BodyText> : null}
           <BodyText>{status}</BodyText>
           <BodyText>Koti on määritetty: {home ? `${home.lat}, ${home.lng}` : "–"}</BodyText>
           <BodyText>Etäisyys kotiin: {distanceM == null ? "–" : `${Math.round(distanceM)} m`}</BodyText>
           <BodyText>Turvallisuus alueen säde: {home?.radiusMeters} m</BodyText>
           <BodyText>Käyttäjä on turva-alueen: {inside ? "SISÄLLÄ" : "ULKONA"}</BodyText>
-          <BodyText variant="bodySmall">TODO: Kun käyttäjä poistuu turva-alueen sisältä, sovellus lähettää varoituksen adminille.</BodyText>
 
         </View>
       </View>

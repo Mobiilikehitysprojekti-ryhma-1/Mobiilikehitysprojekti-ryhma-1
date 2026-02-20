@@ -7,16 +7,15 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useLocation } from "../state/locationStore";
 import { useAuth } from "../../../shared/hooks/useAuth";
 
-import { useTheme } from "react-native-paper";
 import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
 import { HeaderText } from "../../../shared/components/Texts/HeaderText";
 import { BodyText } from "../../../shared/components/Texts/BodyText";
 import { useAppTheme } from "../../../shared/theme/theme";
 import { FlatInputField } from "../../../shared/components/Fields/FlatInputField";
 import { SecondaryButton } from "../../../shared/components/Button/SecondaryButton";
-import { PrimaryButton } from "../../../shared/components/Button/PrimaryButton";
 import MapView, { Circle, Marker } from "react-native-maps";
 import { useSafetyScreen } from "../../user/state/safetyScreenStore";
+import { CustomSlider } from "../../../shared/components/Slider";
 
 const DEFAULT_DELTA = 0.004;
 const FALLBACK_CENTER = { latitude: 60.1699, longitude: 24.9384 };
@@ -24,8 +23,8 @@ const FALLBACK_CENTER = { latitude: 60.1699, longitude: 24.9384 };
 type Props = BottomTabScreenProps<AdminStackParamList, "LocationSettings">;
 
 export function LocationSettingsScreen({ }: Props) {
-	const theme = useTheme();
-	const { spacing } = useAppTheme();
+	const theme = useAppTheme();
+	const { spacing, colors } = theme;
 	const { user } = useAuth();
 
 	const location = useLocation(user?.uid);
@@ -106,67 +105,96 @@ export function LocationSettingsScreen({ }: Props) {
 
 	return (
 		<ScreenWrapper>
-			<View style={{ top: spacing.extraLarge, padding: spacing.large }}>
+			<View style={{ top: spacing.extraLarge }}>
+
 				<HeaderText marginBottom="extraLarge">
 					Location Settings
 				</HeaderText>
+				<View style={{ backgroundColor: colors.secondary + "72", padding: spacing.large, marginBottom: spacing.extraSmall }}>
+					{/* Error Display */}
+					{location.error && (
+						<View>
+							<BodyText>
+								{location.error}
+							</BodyText>
+						</View>
+					)}
 
-				{/* Error Display */}
-				{location.error && (
-					<View>
-						<BodyText>
-							{location.error}
-						</BodyText>
-					</View>
-				)}
+					{/* Address Input */}
+					<HeaderText marginBottom="small">
+						Home address
+					</HeaderText>
+					<FlatInputField
+						value={address}
+						onChangeText={setAddress}
+						placeholder="Mannerheimintie 1, Helsinki, Finland"
+						editable={!isLoading}
+						multiline
+						style={{ marginBottom: spacing.medium }}
+					/>
+				</View>
+				<View style={{ backgroundColor: colors.secondary + "72", paddingLeft: spacing.large, paddingRight: spacing.large, paddingBottom: spacing.medium, paddingTop: spacing.small, marginBottom: spacing.medium }}>
+					<HeaderText marginBottom="small">
+						Safety radius
+					</HeaderText>
 
-				{/* Address Input */}
-				<BodyText >
-					Enter address
-				</BodyText>
-				<FlatInputField
-					value={address}
-					onChangeText={setAddress}
-					placeholder="Mannerheimintie 1, Helsinki, Finland"
-					editable={!isLoading}
-					multiline
-					style={{ marginBottom: spacing.medium }}
-				/>
+					<BodyText>
+						Current radius: {radius}m
+					</BodyText>
 
-				{/* Radius Input */}
-				<BodyText>
-					Safety radius (meters)
-				</BodyText>
-				<FlatInputField
-					value={radius}
-					onChangeText={setRadius}
-					placeholder="150"
-					keyboardType="numeric"
-					editable={!isLoading}
-				/>
+					<CustomSlider
+						value={parseFloat(radius) || 0}
+						onValueChange={(value: number) => setRadius(value.toString())}
+						minimumValue={5}
+						maximumValue={500}
+						step={10}
+						disabled={isLoading}
+					/>
 
-				{/* Geocode and Save Button */}
-				<SecondaryButton
-					style={{ marginTop: spacing.medium }}
-					onPress={handleGeocodeAndSave}
-					disabled={isLoading || !address.trim() || !radius.trim()}
-					loading={isLoading}
-				>
-					{isLoading ? "Processing..." : "Save Location"}
-				</SecondaryButton>
+					<SecondaryButton
+						style={{ marginTop: spacing.small }}
+						onPress={handleGeocodeAndSave}
+						disabled={isLoading || !address.trim() || !radius.trim()}
+						loading={isLoading}
+					>
+						{isLoading ? "Processing..." : "Save Location"}
+					</SecondaryButton>
 
-				{isLoading && (
-					<View>
-						<ActivityIndicator size="small" />
-						<BodyText>
-							Geocoding address...
-						</BodyText>
-					</View>
-				)}
-
+					{isLoading && (
+						<View style={{ flexDirection: 'row', alignItems: 'center', marginTop: spacing.small }}>
+							<ActivityIndicator size="small" />
+							<BodyText marginLeft="small">
+								Geocoding address...
+							</BodyText>
+						</View>
+					)}
+				</View>
 				{/* Current Location Display */}
+				<MapView
+					ref={mapRef}
+					style={{ height: spacing.extraLarge * 7, marginTop: spacing.extraSmall }}
+					initialRegion={initialRegion}
+				>
+					{/* 1. The Saved Home Marker */}
+					{home && (
+						<Marker
+							coordinate={{ latitude: home.lat, longitude: home.lng }}
+							title="Saved Home Location"
+						/>
+					)}
 
-				<View style={{ marginTop: spacing.extraLarge + 40, padding: spacing.small, backgroundColor: theme.colors.secondary, borderRadius: 0, opacity: hasLocation ? 1 : 0.5 }}>
+					{/* 2. The Safety Circle around Home */}
+					{home && (
+						<Circle
+							center={{ latitude: home.lat, longitude: home.lng }}
+							radius={parseFloat(radius) || home.radiusMeters || 0}
+							strokeColor={colors.primary}
+							fillColor={colors.primary + "33"}
+						/>
+					)}
+				</MapView>
+
+				<View style={{ padding: spacing.small, backgroundColor: colors.secondary + "72", borderRadius: 0, opacity: hasLocation ? 1 : 0.5 }}>
 					<BodyText >
 						Currently saved location:
 					</BodyText>
@@ -186,29 +214,6 @@ export function LocationSettingsScreen({ }: Props) {
 						<BodyText variant="bodyMedium">No location data saved</BodyText>
 					)}
 				</View>
-				<MapView
-					ref={mapRef}
-					style={{ height: spacing.extraLarge * 7, marginTop: spacing.extraSmall }}
-					initialRegion={initialRegion}
-				>
-					{/* 1. The Saved Home Marker */}
-					{home && (
-						<Marker
-							coordinate={{ latitude: home.lat, longitude: home.lng }}
-							title="Saved Home Location"
-						/>
-					)}
-
-					{/* 2. The Safety Circle around Home */}
-					{home && (
-						<Circle
-							center={{ latitude: home.lat, longitude: home.lng }}
-							radius={parseFloat(radius) || home.radiusMeters || 0}
-							strokeColor={theme.colors.primary}
-							fillColor={theme.colors.primary + "33"}
-						/>
-					)}
-				</MapView>
 			</View>
 		</ScreenWrapper>
 	);

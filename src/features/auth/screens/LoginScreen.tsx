@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { View, Text, TouchableWithoutFeedback, Keyboard } from "react-native";
-import { useTheme } from "react-native-paper";
+import { View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { AuthStackParamList } from "../../../app/navigation/auth/AuthNavigator";
@@ -13,8 +12,8 @@ import { useAppTheme } from "../../../shared/theme/theme";
 import { SecondaryButton } from "../../../shared/components/Button/SecondaryButton";
 
 export default function LoginScreen() {
-    const theme = useTheme();
-    const { spacing, width, height } = useAppTheme();
+    const theme = useAppTheme();
+    const { spacing, width, colors } = theme;
     const nav = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -50,8 +49,8 @@ export default function LoginScreen() {
                     <View style={{ height: spacing.extraLarge }} />
                     <PrimaryButton
                         disabled={!checkLoginInputs()}
-                        buttonColor={theme.colors.secondary}
-                        textColor={theme.colors.onSecondary}
+                        buttonColor={colors.secondary}
+                        textColor={colors.onSecondary}
                         onPress={() => login({ email, password })}
                     >
                         Sign in
@@ -61,7 +60,7 @@ export default function LoginScreen() {
                     <Text
                         style={{
                             textAlign: "center",
-                            color: theme.colors.secondary,
+                            color: colors.onSurface,
                             textDecorationLine: "underline",
                         }}
                         onPress={() => nav.navigate("ResetPassword")}

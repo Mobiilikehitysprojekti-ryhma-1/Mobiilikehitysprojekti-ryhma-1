@@ -1,13 +1,21 @@
-import { useEffect, useState } from "react";
-import { View, ActivityIndicator } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { View, ActivityIndicator, useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { PaperProvider } from "react-native-paper";
 import RootNavigator from "./navigation/RootNavigator";
 import { initAuthListener } from "../features/auth/state/authSession";
-import { Theme } from "../shared/theme/theme";
+
+import { AppLightTheme, AppDarkTheme } from '../shared/theme/theme';
 
 export default function AppShell() {
     const [booting, setBooting] = useState(true);
+    const colorScheme = useColorScheme();
+
+    // If system is in dark mode, use dark theme, otherwise use light theme
+    const theme = useMemo(() => {
+        console.log("Color scheme changed:", colorScheme);
+        return colorScheme === 'light' ? AppDarkTheme : AppLightTheme;
+    }, [colorScheme]);
 
     useEffect(() => {
         const unsub = initAuthListener(() => setBooting(false));
@@ -16,14 +24,16 @@ export default function AppShell() {
 
     if (booting) {
         return (
-            <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                <ActivityIndicator />
-            </View>
+            <PaperProvider theme={theme}>
+                <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                    <ActivityIndicator />
+                </View>
+            </PaperProvider>
         );
     }
 
     return (
-        <PaperProvider theme={Theme}>
+        <PaperProvider theme={theme}>
             <NavigationContainer>
                 <RootNavigator />
             </NavigationContainer>
