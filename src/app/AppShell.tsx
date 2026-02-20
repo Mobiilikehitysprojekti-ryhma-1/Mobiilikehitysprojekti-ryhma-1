@@ -14,7 +14,7 @@ export default function AppShell() {
     // If system is in dark mode, use dark theme, otherwise use light theme
     const theme = useMemo(() => {
         console.log("Color scheme changed:", colorScheme);
-        return colorScheme === 'light' ? AppDarkTheme : AppLightTheme;
+        return colorScheme === 'dark' ? AppDarkTheme : AppLightTheme;
     }, [colorScheme]);
 
     useEffect(() => {
