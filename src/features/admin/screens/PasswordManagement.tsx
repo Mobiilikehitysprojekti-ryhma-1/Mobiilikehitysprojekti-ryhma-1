@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { View } from "react-native";
-import { useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../shared/hooks/useAuth";
 import { useAppTheme } from "../../../shared/theme/theme";
@@ -14,8 +13,8 @@ import { SecondaryButton } from "../../../shared/components/Button/SecondaryButt
 import { changePassword, resetPassword } from "../../auth/state/authActions";
 
 export function PasswordManagement() {
-    const theme = useTheme();
-    const { spacing } = useAppTheme();
+    const theme = useAppTheme();
+    const { spacing, colors } = theme;
     const navigation = useNavigation();
     const { user } = useAuth();
 
@@ -116,7 +115,7 @@ export function PasswordManagement() {
                 <View
                     style={{
                         height: 1,
-                        backgroundColor: theme.colors.outlineVariant,
+                        backgroundColor: colors.outlineVariant,
                         marginBottom: spacing.extraLarge,
                     }}
                 />

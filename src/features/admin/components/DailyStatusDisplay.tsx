@@ -12,8 +12,8 @@ type Props = {
 };
 
 export function DailyStatusDisplay({ statuses, loading }: Props) {
-	const theme = useTheme();
-	const { spacing, width } = useAppTheme();
+	const theme = useAppTheme();
+	const { spacing, width, height, colors } = theme;
 	const formatDate = (dateStr: string) => {
 		const date = new Date(dateStr);
 		const today = new Date();
@@ -30,13 +30,13 @@ export function DailyStatusDisplay({ statuses, loading }: Props) {
 
 		switch (status) {
 			case "ok":
-				return <Icon size={iconSize} source="check-circle" color={theme.colors.primary} />;
+				return <Icon size={iconSize} source="check-circle" color={colors.primary} />;
 
 			case "not ok":
-				return <Icon size={iconSize} source="close-circle" color={theme.colors.error} />;
+				return <Icon size={iconSize} source="close-circle" color={colors.error} />;
 
 			default:
-				return <Icon size={iconSize} source="circle-outline" color={theme.colors.surface} />;
+				return <Icon size={iconSize} source="circle-outline" color={colors.surface} />;
 		}
 	};
 
@@ -82,9 +82,9 @@ export function DailyStatusDisplay({ statuses, loading }: Props) {
 
 	if (statuses.length === 0) {
 		return (
-			<Card style={{ backgroundColor: theme.colors.secondary }}>
+			<Card style={{ backgroundColor: colors.secondary }}>
 				<Card.Content>
-					<BodyText variant="bodyMedium" style={{ textAlign: "center", color: theme.colors.onSurfaceVariant }}>
+					<BodyText variant="bodyMedium" style={{ textAlign: "center", color: colors.onSurfaceVariant }}>
 						No status data available yet
 					</BodyText>
 				</Card.Content>
@@ -96,9 +96,9 @@ export function DailyStatusDisplay({ statuses, loading }: Props) {
 		<ScrollView>
 			<View style={{ flex: 1, width: width.full, gap: 12 }}>
 				{statuses.map((status) => (
-					<Card key={status.date} style={{ backgroundColor: theme.colors.secondary, borderRadius: 0 }}>
+					<Card key={status.date} style={{ backgroundColor: colors.secondary, borderRadius: 0 }}>
 						<Card.Content>
-							<HeaderText marginBottom={spacing.medium} variant={"titleMedium"} style={{ borderBottomWidth: 1, borderColor: theme.colors.primary }} >
+							<HeaderText marginBottom={spacing.medium} variant={"titleMedium"} style={{ borderBottomWidth: 1, borderColor: colors.primary }} >
 								{formatDate(status.date)}
 							</HeaderText>
 
@@ -130,17 +130,17 @@ export function DailyStatusDisplay({ statuses, loading }: Props) {
 									{status.location.stayedInArea ? (
 										<>
 											<BodyText marginBottom="small">Stayed in area </BodyText>
-											<Icon size={20} source="check-circle" color={theme.colors.tertiary} />
+											<Icon size={20} source="check-circle" color={colors.tertiary} />
 										</>
 									) : (
 										<>
-											<Icon size={20} source="close-circle" color={theme.colors.error} />
-											<BodyText style={{ color: theme.colors.error, marginLeft: spacing.extraSmall }}>Left area</BodyText>
+											<Icon size={20} source="close-circle" color={colors.error} />
+											<BodyText style={{ color: colors.error, marginLeft: spacing.extraSmall }}>Left area</BodyText>
 										</>
 									)}
 
 									{status.location.breaches !== undefined && status.location.breaches > 0 && (
-										<BodyText variant="bodySmall" style={{ color: theme.colors.error }}> ({status.location.breaches} breaches)</BodyText>
+										<BodyText variant="bodySmall" style={{ color: colors.error }}> ({status.location.breaches} breaches)</BodyText>
 									)}
 								</View>
 							</View>

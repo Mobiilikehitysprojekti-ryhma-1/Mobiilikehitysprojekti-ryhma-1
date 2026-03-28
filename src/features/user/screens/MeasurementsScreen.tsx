@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useState } from "react";
-import { View, Text, Button, StyleSheet, ActivityIndicator, Alert } from "react-native";
+import { View, ActivityIndicator, Alert } from "react-native";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { UserStackParamList } from "../navigation/types";
 import { useAuth } from "../../../shared/hooks/useAuth";
@@ -11,7 +11,6 @@ import { BodyText } from "../../../shared/components/Texts/BodyText";
 import { HeaderText } from "../../../shared/components/Texts/HeaderText";
 import { PrimaryButton } from "../../../shared/components/Button/PrimaryButton";
 import { useAppTheme } from "../../../shared/theme/theme";
-import { useTheme } from "react-native-paper";
 import { ScreenWrapper } from "../../../shared/components/ScreenWrapper";
 
 type Props = BottomTabScreenProps<UserStackParamList, "Measurements">;
@@ -23,8 +22,8 @@ function todayStr(): string {
 }
 
 export default function MeasurementsScreen({ }: Props) {
-  const theme = useTheme();
-  const { spacing, width } = useAppTheme();
+  const theme = useAppTheme();
+  const { spacing, colors } = theme;
   const { user } = useAuth();
   const date = useMemo(() => todayStr(), []);
   const {
@@ -118,10 +117,10 @@ export default function MeasurementsScreen({ }: Props) {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: theme.colors.primary,
+        backgroundColor: colors.primary,
         padding: spacing.large,
       }}>
-        <ActivityIndicator size="large" color={theme.colors.secondary} />
+        <ActivityIndicator size="large" color={colors.secondary} />
         <BodyText style={{
           marginTop: spacing.large,
           textAlign: "center",
@@ -144,7 +143,7 @@ export default function MeasurementsScreen({ }: Props) {
           <View style={{
             marginBottom: spacing.large,
             padding: spacing.medium,
-            backgroundColor: theme.colors.error
+            backgroundColor: colors.error
           }}>
             <BodyText>{error}</BodyText>
           </View>
@@ -165,10 +164,7 @@ export default function MeasurementsScreen({ }: Props) {
           </PrimaryButton>
         </View>
 
-
-
-
-        <View style={{ padding: spacing.large, backgroundColor: theme.colors.secondary, marginTop: spacing.large }}>
+        <View style={{ padding: spacing.large, backgroundColor: colors.secondary, marginTop: spacing.large }}>
           <HeaderText marginBottom="large">Todays measurements</HeaderText>
           <View>
             <BodyText>Morning: </BodyText>

@@ -7,12 +7,30 @@ import { MedScheduleScreen } from "../../features/admin/screens/MedScheduleScree
 import { LocationSettingsScreen } from "../../features/admin/screens/LocationSettingsScreen";
 import { MeasurementsHistoryScreen } from "../../features/admin/screens/MeasurementsHistoryScreen";
 import { Icon } from "react-native-paper";
+import { useAppTheme } from "../../shared/theme/theme";
 
 const Tab = createBottomTabNavigator<AdminStackParamList>();
 
 export function AdminStack() {
+  const theme = useAppTheme();
+  const { colors } = theme;
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.outline,
+        },
+
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.onSurfaceVariant,
+
+        headerStyle: {
+          backgroundColor: colors.surface,
+        },
+        headerTintColor: colors.onSurface,
+      }}
+    >
       <Tab.Screen name="AdminHome" component={AdminHomeStack}
         options={{
           title: "Home",

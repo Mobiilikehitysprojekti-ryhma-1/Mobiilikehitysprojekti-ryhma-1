@@ -1,4 +1,5 @@
-import { Button, ButtonProps, useTheme } from 'react-native-paper';
+import { Button, ButtonProps } from 'react-native-paper';
+import { useAppTheme } from '../../theme/theme';
 
 export function PrimaryButton({
   textColor,
@@ -8,20 +9,21 @@ export function PrimaryButton({
   mode = "contained",
   ...rest
 }: ButtonProps) {
-  const theme = useTheme();
+  const theme = useAppTheme();
+  const { colors } = theme;
 
   return (
     <Button
       {...rest}
 
       mode={mode}
-      buttonColor={buttonColor ?? theme.colors.primary}
-      textColor={textColor ?? theme.colors.onPrimary}
+      buttonColor={buttonColor ?? colors.primary}
+      textColor={textColor ?? colors.onPrimary}
 
       style={[
         {
           borderRadius: 3,
-          borderColor: theme.colors.outline,
+          borderColor: colors.outline,
           padding: 8,
         },
         style,

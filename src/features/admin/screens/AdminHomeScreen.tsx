@@ -1,6 +1,5 @@
 import React from "react";
 import { View } from "react-native";
-import { useTheme } from "react-native-paper";
 import type { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { AdminHomeStackParamList } from "../navigation/types";
 import { useAuth } from "../../../shared/hooks/useAuth";
@@ -17,9 +16,9 @@ import { SettingsButton } from "../../../shared/components/Button/SettingsButton
 type Props = NativeStackScreenProps<AdminHomeStackParamList, "AdminHomeMain">;
 
 export function AdminHomeScreen({ }: Props) {
-  const theme = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<AdminHomeStackParamList>>();
-  const { spacing, width, height } = useAppTheme();
+  const theme = useAppTheme();
+  const { spacing, colors } = theme;
   const { user } = useAuth();
   const { mode } = useAppMode();
   const oletustilaLabel = mode === "admin" ? "Admin" : "Käyttäjä";
@@ -56,7 +55,7 @@ export function AdminHomeScreen({ }: Props) {
         </HeaderText>
 
         {dailyStatus.error && (
-          <BodyText marginBottom="small" style={{ color: theme.colors.error }}>
+          <BodyText marginBottom="small" style={{ color: colors.error }}>
             Error: {dailyStatus.error}
           </BodyText>
         )}

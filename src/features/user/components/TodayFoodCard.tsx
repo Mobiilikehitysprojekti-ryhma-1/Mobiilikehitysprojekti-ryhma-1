@@ -24,14 +24,15 @@ function StatusIcon({
 	status: "ok" | "not ok" | "pending";
 	size?: number;
 }) {
-	const theme = useTheme();
+	const theme = useAppTheme();
+	const { colors } = theme;
 	switch (status) {
 		case "ok":
-			return <Icon size={size} source="check-circle" color={theme.colors.primary} />;
+			return <Icon size={size} source="check-circle" color={colors.primary} />;
 		case "not ok":
-			return <Icon size={size} source="close-circle" color={theme.colors.error} />;
+			return <Icon size={size} source="close-circle" color={colors.error} />;
 		default:
-			return <Icon size={size} source="circle-outline" color={theme.colors.surface} />;
+			return <Icon size={size} source="circle-outline" color={colors.surface} />;
 	}
 }
 
@@ -40,15 +41,15 @@ export function TodayFoodCard({
 	mealsStatus,
 	onMarkTaken,
 }: Props) {
-	const theme = useTheme();
-	const { spacing } = useAppTheme();
+	const theme = useAppTheme();
+	const { spacing, colors } = theme;
 
 	if (!mealsSchedule) {
 		return (
-			<Card style={{ backgroundColor: theme.colors.secondary, borderRadius: 0,marginBottom: spacing.medium }}>
+			<Card style={{ backgroundColor: colors.secondary, borderRadius: 0, marginBottom: spacing.medium }}>
 				<Card.Content>
 					<HeaderText marginBottom="small">Food today</HeaderText>
-					<BodyText variant="bodySmall" style={{ textAlign: "center", color: theme.colors.onSurfaceVariant }}>
+					<BodyText variant="bodySmall" style={{ textAlign: "center", color: colors.onSurfaceVariant }}>
 						Food times are not set.
 					</BodyText>
 				</Card.Content>
@@ -57,9 +58,9 @@ export function TodayFoodCard({
 	}
 
 	return (
-		<Card style={{ backgroundColor: theme.colors.secondary, borderRadius: 0, marginBottom: spacing.medium }}>
+		<Card style={{ backgroundColor: colors.secondary, borderRadius: 0, marginBottom: spacing.medium }}>
 			<Card.Content>
-				<HeaderText marginBottom={spacing.medium} variant="titleMedium" style={{ borderBottomWidth: 1, borderColor: theme.colors.primary }}>
+				<HeaderText marginBottom={spacing.medium} variant="titleMedium" style={{ borderBottomWidth: 1, borderColor: colors.primary }}>
 					Food today
 				</HeaderText>
 				<View style={styles.rows}>
@@ -82,7 +83,7 @@ export function TodayFoodCard({
 											</BodyText>
 										</TouchableOpacity>
 									)}
-										<StatusIcon status={status} />
+									<StatusIcon status={status} />
 								</View>
 							</View>
 						);

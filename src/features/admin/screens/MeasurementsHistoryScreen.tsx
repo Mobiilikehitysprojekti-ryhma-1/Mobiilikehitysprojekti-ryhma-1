@@ -1,6 +1,5 @@
 import React from "react";
 import { ScrollView, View, Dimensions } from "react-native";
-import { useTheme } from "react-native-paper";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { AdminStackParamList } from "../navigation/types";
 import { useState, useCallback } from "react";
@@ -17,9 +16,9 @@ const screenWidth = Dimensions.get("window").width;
 
 type Props = BottomTabScreenProps<AdminStackParamList, "MeasurementsHistory">;
 
-export function MeasurementsHistoryScreen({}: Props) {
-	const theme = useTheme();
-	const { spacing } = useAppTheme();
+export function MeasurementsHistoryScreen({ }: Props) {
+	const theme = useAppTheme();
+	const { spacing, width, height, colors } = theme;
 	const { user } = useAuth();
 	const userId = user?.uid;
 	const [docs, setDocs] = useState<BPDoc[]>([]);
@@ -84,7 +83,7 @@ export function MeasurementsHistoryScreen({}: Props) {
 		return (
 			<ScreenWrapper>
 				<View style={{ flex: 1, padding: spacing.large, justifyContent: "center" }}>
-					<BodyText variant="bodyMedium" color={theme.colors.onPrimary}>No user found</BodyText>
+					<BodyText variant="bodyMedium" color={colors.onPrimary}>No user found</BodyText>
 				</View>
 			</ScreenWrapper>
 		);
@@ -94,10 +93,10 @@ export function MeasurementsHistoryScreen({}: Props) {
 		<ScreenWrapper>
 			<View style={{ top: spacing.extraLarge, padding: spacing.large, flex: 1 }}>
 				<ScrollView contentContainerStyle={{ paddingBottom: spacing.extraLarge }}>
-					<HeaderText marginBottom="small" style={{ color: theme.colors.onPrimary }}>
+					<HeaderText marginBottom="small" style={{ color: colors.onPrimary }}>
 						Bloodpressure history
 					</HeaderText>
-					<BodyText variant="bodyMedium" marginBottom="medium" color={theme.colors.onPrimary}>
+					<BodyText variant="bodyMedium" marginBottom="medium" color={colors.onPrimary}>
 						Requested: {docs.length} days
 					</BodyText>
 
@@ -122,7 +121,7 @@ export function MeasurementsHistoryScreen({}: Props) {
 											data: diaEveningData,
 											color: (o = 1) => `${EVENING_COLOR}, ${o})`,
 											strokeWidth: 2,
-										},										{
+										}, {
 											data: diaMorningData,
 											color: (o = 1) => `${MORNING_COLOR}, ${o})`,
 											strokeWidth: 2,
@@ -137,11 +136,11 @@ export function MeasurementsHistoryScreen({}: Props) {
 								withInnerLines={false}
 								bezier
 								chartConfig={{
-									backgroundGradientFrom: theme.colors.surface,
-									backgroundGradientTo: theme.colors.surface,
+									backgroundGradientFrom: colors.surface,
+									backgroundGradientTo: colors.surface,
 									decimalPlaces: 0,
-									color: () => theme.colors.primary,
-									labelColor: () => theme.colors.onSurface,
+									color: () => colors.primary,
+									labelColor: () => colors.onSurface,
 									propsForLabels: { fontSize: 10 },
 								}}
 								style={{ borderRadius: 12, marginBottom: spacing.large }}
@@ -150,15 +149,15 @@ export function MeasurementsHistoryScreen({}: Props) {
 					)}
 
 					{loading && (
-						<BodyText variant="bodyMedium" marginBottom="small" color={theme.colors.onPrimary}>Loading...</BodyText>
+						<BodyText variant="bodyMedium" marginBottom="small" color={colors.onPrimary}>Loading...</BodyText>
 					)}
 					{error && (
-						<BodyText variant="bodyMedium" marginBottom="small" style={{ color: theme.colors.error }}>
+						<BodyText variant="bodyMedium" marginBottom="small" style={{ color: colors.error }}>
 							{error}
 						</BodyText>
 					)}
 					{docs.length === 0 && !loading && !error && (
-						<BodyText variant="bodyMedium" color={theme.colors.onPrimary}>No measurements available</BodyText>
+						<BodyText variant="bodyMedium" color={colors.onPrimary}>No measurements available</BodyText>
 					)}
 
 					{docs.map((d) => (
@@ -168,17 +167,17 @@ export function MeasurementsHistoryScreen({}: Props) {
 								marginBottom: spacing.medium,
 								padding: spacing.medium,
 								borderRadius: 0,
-								backgroundColor: theme.colors.secondary,
+								backgroundColor: colors.secondary,
 							}}
 						>
-							<BodyText variant="bodyMedium" style={{ fontWeight: "600" }} marginBottom="small" color={theme.colors.onPrimary}>
+							<BodyText variant="bodyMedium" style={{ fontWeight: "600" }} marginBottom="small" color={colors.onPrimary}>
 								{d.date}
 							</BodyText>
-							<BodyText variant="bodyMedium" marginBottom="small" color={theme.colors.onPrimary}>
+							<BodyText variant="bodyMedium" marginBottom="small" color={colors.onPrimary}>
 								Morning: SYS {d.bloodPressure?.morning?.reading?.sys ?? "-"} / DIA{" "}
 								{d.bloodPressure?.morning?.reading?.dia ?? "-"} (pulse {d.bloodPressure?.morning?.reading?.pulse ?? "-"})
 							</BodyText>
-							<BodyText variant="bodyMedium" color={theme.colors.onPrimary}>
+							<BodyText variant="bodyMedium" color={colors.onPrimary}>
 								Evening: SYS {d.bloodPressure?.evening?.reading?.sys ?? "-"} / DIA{" "}
 								{d.bloodPressure?.evening?.reading?.dia ?? "-"} (pulse {d.bloodPressure?.evening?.reading?.pulse ?? "-"})
 							</BodyText>

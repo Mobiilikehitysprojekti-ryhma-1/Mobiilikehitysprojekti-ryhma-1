@@ -7,6 +7,8 @@ import { BodyText } from "../../../shared/components/Texts/BodyText";
 import { HeaderText } from "../../../shared/components/Texts/HeaderText";
 import { useAppTheme } from "../../../shared/theme/theme";
 
+
+
 type MedKey = keyof MedsItems;
 
 const MED_ORDER: MedKey[] = ["morning", "noon", "evening", "night"];
@@ -18,20 +20,22 @@ type Props = {
 };
 
 function StatusIcon({
+	
 	status,
 	size = 22,
 }: {
 	status: "ok" | "not ok" | "pending";
 	size?: number;
 }) {
-	const theme = useTheme();
+	const theme = useAppTheme();
+	const { colors } = theme;
 	switch (status) {
 		case "ok":
-			return <Icon size={size} source="check-circle" color={theme.colors.primary} />;
+			return <Icon size={size} source="check-circle" color={colors.primary} />;
 		case "not ok":
-			return <Icon size={size} source="close-circle" color={theme.colors.error} />;
+			return <Icon size={size} source="close-circle" color={colors.error} />;
 		default:
-			return <Icon size={size} source="circle-outline" color={theme.colors.surface} />;
+			return <Icon size={size} source="circle-outline" color={colors.surface} />;
 	}
 }
 
@@ -40,15 +44,15 @@ export function TodayMedsCard({
 	medsStatus,
 	onMarkTaken,
 }: Props) {
-	const theme = useTheme();
-	const { spacing } = useAppTheme();
+	const theme = useAppTheme();
+	const { spacing, colors } = theme;
 
 	if (!medsSchedule) {
 		return (
-			<Card style={{ backgroundColor: theme.colors.secondary, borderRadius: 0, marginBottom: spacing.medium }}>
+			<Card style={{ backgroundColor: colors.secondary, borderRadius: 0, marginBottom: spacing.medium }}>
 				<Card.Content>
 					<HeaderText marginBottom="small">Meds today</HeaderText>
-					<BodyText variant="bodySmall" style={{ textAlign: "center", color: theme.colors.onSurfaceVariant }}>
+					<BodyText variant="bodySmall" style={{ textAlign: "center", color: colors.onSurfaceVariant }}>
 						Meds times are not set.
 					</BodyText>
 				</Card.Content>
@@ -57,9 +61,9 @@ export function TodayMedsCard({
 	}
 
 	return (
-		<Card style={{ backgroundColor: theme.colors.secondary, borderRadius: 0,marginBottom: spacing.medium }}>
+		<Card style={{ backgroundColor: colors.secondary, borderRadius: 0,marginBottom: spacing.medium }}>
 			<Card.Content>
-				<HeaderText marginBottom={spacing.medium} variant="titleMedium" style={{ borderBottomWidth: 1, borderColor: theme.colors.primary }}>
+				<HeaderText marginBottom={spacing.medium} variant="titleMedium" style={{ borderBottomWidth: 1, borderColor: colors.primary }}>
 					Meds today
 				</HeaderText>
 				<View style={styles.rows}>
